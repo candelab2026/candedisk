@@ -71,7 +71,7 @@ public static class PowerShellRunner
     }
 
     /// <summary>PowerShell con stderr rediretto emette XML (CLIXML): estrae solo i messaggi di errore.</summary>
-    private static string CleanError(string error)
+    internal static string CleanError(string error)
     {
         if (!error.StartsWith("#< CLIXML")) return error;
 

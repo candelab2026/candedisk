@@ -19,3 +19,8 @@ Prima versione.
 - Registro delle operazioni in `%LocalAppData%\CandeDisk\logs`.
 - Modalità `--demo` con dati di esempio.
 - Logo e icona dell'applicazione.
+- Test automatici (`dotnet test`) e script `scripts/TestDisk.ps1` per provare l'app su un disco virtuale.
+
+### Sicurezza
+- Il ripiego su `diskpart ... delete partition override` scatta solo per le partizioni speciali (EFI, OEM, ripristino). Per le altre un errore di Windows, ad esempio un volume in uso, ferma l'operazione.
+- Etichette e file system vengono validati prima di costruire gli script PowerShell, con test dedicati contro l'iniezione di comandi.

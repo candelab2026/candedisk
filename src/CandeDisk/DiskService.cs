@@ -92,17 +92,20 @@ public static class DiskService
         return PowerShellRunner.RunAsync(script);
     }
 
-    public static async Task DeleteAsync(int diskNumber, int partitionNumber)
+    /// <param name="isProtectedType">
+    /// True solo per partizioni speciali (EFI, OEM, ripristino): sono le uniche per cui si ripiega su diskpart.
+    /// Per tutte le altre un errore di Remove-Partition (es. volume in uso) deve fermare l'operazione:
+    /// "override" cancellerebbe comunque e aggirerebbe la protezione di Windows.
+    /// </param>
+    public static async Task DeleteAsync(int diskNumber, int partitionNumber, bool isProtectedType = false)
     {
         try
         {
             await PowerShellRunner.RunAsync(
                 $"Remove-Partition -DiskNumber {diskNumber} -PartitionNumber {partitionNumber} -Confirm:$false");
         }
-        catch (DiskOperationException)
+        catch (DiskOperationException) when (isProtectedType)
         {
-            // Le partizioni protette (EFI, OEM, ripristino) rifiutano Remove-Partition:
-            // diskpart con "override" è l'unico modo per cancellarle.
             await PowerShellRunner.RunDiskpartAsync(
                 $"select disk {diskNumber}\r\nselect partition {partitionNumber}\r\ndelete partition override\r\n");
         }

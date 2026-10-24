@@ -38,7 +38,7 @@ Windows *Disk Management* sometimes gets in the way: "Delete Volume" greyed out 
 
 ## Requirements
 
-- Windows 10 or 11 (64-bit)
+- Windows 11 (64-bit), where it has been tested. Windows 10 should work (same storage functions) but is **not verified**.
 - **Administrator** rights to change disks (read-only otherwise)
 
 ## Install

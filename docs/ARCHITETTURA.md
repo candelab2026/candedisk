@@ -20,6 +20,8 @@ src/CandeDisk/
   Assets/                logo e icona dell'applicazione
 ```
 
+Fuori da `src/`: `tests/CandeDisk.Tests` (test xUnit, non toccano i dischi), `scripts/TestDisk.ps1` (crea/rimuove un disco virtuale di prova), `.github/` (workflow di build e release, template).
+
 ## Flusso di un'operazione
 
 1. L'utente seleziona una partizione e sceglie un comando (menu, barra, scorciatoia).
@@ -35,7 +37,7 @@ src/CandeDisk/
 - **`-EncodedCommand`.** Gli script passano in Base64 UTF-16 per eliminare problemi di quoting. I valori variabili sono numeri o stringhe validate con una lista di caratteri ammessi, e le virgolette singole vengono raddoppiate.
 - **Messaggi d'errore.** PowerShell con stderr rediretto produce XML (CLIXML): `PowerShellRunner` ne estrae solo il testo dell'errore e disattiva la barra di avanzamento.
 - **Spazio non allocato calcolato in C#.** Windows non lo elenca: `DiskInfo.BuildRows` ricava gli intervalli liberi dalle posizioni delle partizioni. Windows riserva però qualche MB in più (es. fine disco MBR), quindi, se l'utente chiede quasi tutto lo spazio, `New-Partition` riceve `-UseMaximumSize` e decide da solo.
-- **Eliminazione protetta.** `Remove-Partition` rifiuta alcune partizioni (EFI, OEM): in quel caso si usa `diskpart` con `delete partition override`.
+- **Eliminazione protetta.** `Remove-Partition` rifiuta alcune partizioni (EFI, OEM): solo per quelle (`PartitionInfo.IsSpecial`) si ripiega su `diskpart` con `delete partition override`. Per le altre un errore ferma l'operazione, perché "override" cancellerebbe comunque, anche un volume in uso.
 - **Elevazione.** La build Release incorpora un manifest `requireAdministrator`; la Debug no, e mostra un banner con il pulsante per riavviarsi come amministratore.
 
 ## Opzioni da riga di comando

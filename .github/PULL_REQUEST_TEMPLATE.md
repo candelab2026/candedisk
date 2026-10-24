@@ -8,7 +8,7 @@
 
 ## Controlli
 
-- [ ] `dotnet build src/CandeDisk` termina senza errori né avvisi
+- [ ] `dotnet build` e `dotnet test` terminano senza errori né avvisi
 - [ ] Ho provato le operazioni sui dischi **solo** su dischi virtuali o di prova
 - [ ] Le nuove operazioni passano da `Safety`, chiedono conferma e scrivono nel log
 - [ ] Ho aggiornato `docs/GUIDA.md` e `CHANGELOG.md`, se la modifica è visibile all'utente

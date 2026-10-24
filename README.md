@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://github.com/candelab2026/candedisk/actions/workflows/build.yml"><img alt="Build" src="https://github.com/candelab2026/candedisk/actions/workflows/build.yml/badge.svg" /></a>
   <a href="LICENSE"><img alt="Licenza MIT" src="https://img.shields.io/badge/licenza-MIT-blue.svg" /></a>
-  <img alt="Piattaforma" src="https://img.shields.io/badge/piattaforma-Windows%2010%20%7C%2011-0078D6.svg" />
+  <img alt="Piattaforma" src="https://img.shields.io/badge/piattaforma-Windows%2011-0078D6.svg" />
   <img alt=".NET 9" src="https://img.shields.io/badge/.NET-9-512BD4.svg" />
 </p>
 
@@ -49,7 +49,7 @@ Il programma è in italiano. Le versioni future potranno aggiungere altre lingue
 
 ## Requisiti
 
-- Windows 10 o Windows 11 (64 bit)
+- Windows 11 (64 bit), su cui è stato provato. Windows 10 dovrebbe funzionare perché usa le stesse funzioni di archiviazione, ma **non è stato verificato**.
 - Privilegi di **amministratore** per modificare i dischi (senza, il programma funziona in sola lettura)
 
 ## Installazione
@@ -110,11 +110,21 @@ dotnet run --project src/CandeDisk
 
 Una build **Debug** parte senza richiedere l'amministratore (sola lettura, con un pulsante per riavviarsi con i permessi). Una build **Release** richiede l'UAC all'avvio.
 
+Test automatici (non toccano nessun disco):
+
+```powershell
+dotnet test
+```
+
+Per provare le operazioni vere usa un disco virtuale, non i tuoi dischi: vedi [CONTRIBUTING.md](CONTRIBUTING.md) e `scripts/TestDisk.ps1`.
+
 Per creare l'eseguibile autonomo:
 
 ```powershell
-dotnet publish src/CandeDisk -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o dist
+dotnet publish src/CandeDisk -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist
 ```
+
+L'eseguibile risultante pesa circa 60 MB perché include il runtime .NET.
 
 ## Come funziona
 

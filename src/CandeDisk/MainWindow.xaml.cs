@@ -312,7 +312,7 @@ public partial class MainWindow : Window
 
         await RunAsync("Eliminazione in corso...",
             $"ELIMINA partizione {Describe(part)} del disco {disk.Number} ({disk.FriendlyName})",
-            () => DiskService.DeleteAsync(disk.Number, part.PartitionNumber));
+            () => DiskService.DeleteAsync(disk.Number, part.PartitionNumber, part.IsSpecial));
     }
 
     private async void Resize_Click(object sender, RoutedEventArgs e)

@@ -38,7 +38,7 @@ public sealed class PartitionInfo
 
     /// <summary>EFI, MSR, Recovery, OEM: partizioni che Gestione disco spesso protegge.</summary>
     public bool IsSpecial =>
-        !IsFree && (IsSystem || Type is "System" or "Reserved" or "Recovery" or "OEM" or "Unknown");
+        !IsFree && (IsSystem || Type is "System" or "Reserved" or "Recovery" or "OEM");
 
     public string Number => IsFree ? "" : PartitionNumber.ToString();
     public string Letter => string.IsNullOrEmpty(DriveLetter) ? "" : DriveLetter + ":";

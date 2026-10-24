@@ -23,6 +23,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="CandeDisk.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\app.ico" />
     <Resource Include="Assets\logo.png" />
     <!-- La guida è un solo file: docs/GUIDA.md, letto da GitHub e mostrato nell'app. -->
