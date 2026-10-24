@@ -67,9 +67,14 @@ public static class DiskService
     public static Task FormatAsync(int diskNumber, int partitionNumber, string fileSystem, string label, bool quick = true)
     {
         Validate(fileSystem, label);
+        return PowerShellRunner.RunAsync(BuildFormatScript(diskNumber, partitionNumber, fileSystem, label, quick));
+    }
+
+    internal static string BuildFormatScript(int diskNumber, int partitionNumber, string fileSystem, string label, bool quick)
+    {
         // Senza -Full, Format-Volume esegue la formattazione rapida; con -Full scrive tutto il volume (lento).
         string full = quick ? "" : " -Full";
-        return PowerShellRunner.RunAsync(
+        return QuietShell(
             $"Get-Partition -DiskNumber {diskNumber} -PartitionNumber {partitionNumber} | " +
             $"Format-Volume -FileSystem {fileSystem} -NewFileSystemLabel '{Quote(label)}'{full} -Confirm:$false -Force | Out-Null");
     }
@@ -78,6 +83,11 @@ public static class DiskService
     public static Task CreateAsync(int diskNumber, ulong offset, ulong size, ulong gapEnd, string fileSystem, string label)
     {
         if (fileSystem.Length > 0) Validate(fileSystem, label);
+        return PowerShellRunner.RunAsync(BuildCreateScript(diskNumber, offset, size, gapEnd, fileSystem, label));
+    }
+
+    internal static string BuildCreateScript(int diskNumber, ulong offset, ulong size, ulong gapEnd, string fileSystem, string label)
+    {
         ulong alignedOffset = (offset + MiB - 1) / MiB * MiB;
 
         // Se si chiede tutto lo spazio libero, lascia decidere a Windows: i byte persi
@@ -85,12 +95,29 @@ public static class DiskService
         // Il margine di 4 MiB copre lo spazio che Windows tiene per sé (es. fine disco MBR).
         bool wantsMaximum = alignedOffset + size + 4 * MiB >= gapEnd;
         string sizeArg = wantsMaximum ? "-UseMaximumSize" : $"-Size {size}";
-        string script =
-            $"$p = New-Partition -DiskNumber {diskNumber} -Offset {alignedOffset} {sizeArg} -AssignDriveLetter; ";
+
+        // La partizione nasce SENZA lettera: con una lettera e senza file system Windows la vede come
+        // disco vuoto e mostra "È necessario formattare" e un errore di Esplora risorse.
+        // La lettera si assegna solo dopo la formattazione. Senza formattazione resta senza lettera.
+        string script = $"$p = New-Partition -DiskNumber {diskNumber} -Offset {alignedOffset} {sizeArg}; ";
         if (fileSystem.Length > 0)
-            script += $"$p | Format-Volume -FileSystem {fileSystem} -NewFileSystemLabel '{Quote(label)}' -Confirm:$false -Force | Out-Null";
-        return PowerShellRunner.RunAsync(script);
+        {
+            script += $"$p | Format-Volume -FileSystem {fileSystem} -NewFileSystemLabel '{Quote(label)}' -Confirm:$false -Force | Out-Null; " +
+                      $"Add-PartitionAccessPath -DiskNumber {diskNumber} -PartitionNumber $p.PartitionNumber -AssignDriveLetter";
+        }
+        return QuietShell(script);
     }
+
+    /// <summary>
+    /// Sospende il rilevamento hardware della shell (le finestre di AutoPlay e "formattare il disco?")
+    /// mentre lo script lavora, e lo riattiva sempre alla fine, anche in caso di errore.
+    /// </summary>
+    internal static string QuietShell(string script) =>
+        "$svc = Get-Service ShellHWDetection -ErrorAction SilentlyContinue; " +
+        "$wasRunning = $svc -and $svc.Status -eq 'Running'; " +
+        "if ($wasRunning) { Stop-Service ShellHWDetection -Force -ErrorAction SilentlyContinue }; " +
+        "try { " + script + " } " +
+        "finally { if ($wasRunning) { Start-Service ShellHWDetection -ErrorAction SilentlyContinue } }";
 
     /// <param name="isProtectedType">
     /// True solo per partizioni speciali (EFI, OEM, ripristino): sono le uniche per cui si ripiega su diskpart.
