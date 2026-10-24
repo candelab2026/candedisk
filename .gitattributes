@@ -1,0 +1,12 @@
+# Normalizza i fine riga: nel repository sempre LF, in locale lo decide git.
+* text=auto
+
+*.cs    text diff=csharp
+*.xaml  text
+*.csproj text
+*.md    text
+*.yml   text
+
+# File binari
+*.png binary
+*.ico binary

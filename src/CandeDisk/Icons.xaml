@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Icone a tratto su griglia 24x24. Si usano con <Path Style="{StaticResource Icon}" Data="{StaticResource IconXxx}" /> -->
+
+    <Geometry x:Key="IconRefresh">M4,12 A8,8 0 0 1 18.5,7 M20,3 V8 H15 M20,12 A8,8 0 0 1 5.5,17 M4,21 V16 H9</Geometry>
+    <Geometry x:Key="IconInit">M12,3 V12 M7,6.5 A8,8 0 1 0 17,6.5</Geometry>
+    <Geometry x:Key="IconCreate">M12,5 V19 M5,12 H19</Geometry>
+    <Geometry x:Key="IconFormat">M3.5,15.5 L14,5 L19,10 L10,20.5 H6.5 Z M9,10.5 L14.5,16 M14,20.5 H21</Geometry>
+    <Geometry x:Key="IconResize">M3,12 H21 M3,12 L7,8 M3,12 L7,16 M21,12 L17,8 M21,12 L17,16</Geometry>
+    <Geometry x:Key="IconDelete">M4,7 H20 M9,7 V4 H15 V7 M6,7 L7,20 H17 L18,7 M10,11 V16 M14,11 V16</Geometry>
+    <Geometry x:Key="IconHelp">M12,21 A9,9 0 1 0 12,3 A9,9 0 0 0 12,21 Z M9.5,9.5 A2.5,2.5 0 1 1 12,12 V14 M12,17 V17.2</Geometry>
+    <Geometry x:Key="IconInfo">M12,21 A9,9 0 1 0 12,3 A9,9 0 0 0 12,21 Z M12,11 V17 M12,7.5 V7.6</Geometry>
+    <Geometry x:Key="IconShield">M12,3 L20,6 V12 C20,17 16.5,20 12,21 C7.5,20 4,17 4,12 V6 Z M9,12 L11,14 L15,10</Geometry>
+    <Geometry x:Key="IconExit">M10,4 H5 V20 H10 M14,8 L18,12 L14,16 M18,12 H9</Geometry>
+    <Geometry x:Key="IconDisk">M3,14 L6,6 H18 L21,14 V18 H3 Z M3,14 H21 M17,16 H17.2</Geometry>
+    <Geometry x:Key="IconCopy">M9,9 H20 V20 H9 Z M5,15 V4 H16</Geometry>
+    <Geometry x:Key="IconLog">M6,3 H15 L19,7 V21 H6 Z M14,3 V8 H19 M9,12 H16 M9,16 H16</Geometry>
+    <Geometry x:Key="IconWeb">M12,21 A9,9 0 1 0 12,3 A9,9 0 0 0 12,21 Z M3,12 H21 M12,3 C8,7 8,17 12,21 M12,3 C16,7 16,17 12,21</Geometry>
+
+    <!-- Il colore del tratto segue il Foreground del pulsante/menu: le icone si disattivano insieme al comando. -->
+    <Style x:Key="Icon" TargetType="Path">
+        <Setter Property="Width" Value="18" />
+        <Setter Property="Height" Value="18" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="StrokeThickness" Value="1.8" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Control}}" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.35" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

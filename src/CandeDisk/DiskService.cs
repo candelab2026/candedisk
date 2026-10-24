@@ -64,22 +64,29 @@ public static class DiskService
     public static Task InitializeAsync(int diskNumber) =>
         PowerShellRunner.RunAsync($"Initialize-Disk -Number {diskNumber} -PartitionStyle GPT | Out-Null");
 
-    public static Task FormatAsync(int diskNumber, int partitionNumber, string fileSystem, string label)
+    public static Task FormatAsync(int diskNumber, int partitionNumber, string fileSystem, string label, bool quick = true)
     {
         Validate(fileSystem, label);
+        // Senza -Full, Format-Volume esegue la formattazione rapida; con -Full scrive tutto il volume (lento).
+        string full = quick ? "" : " -Full";
         return PowerShellRunner.RunAsync(
             $"Get-Partition -DiskNumber {diskNumber} -PartitionNumber {partitionNumber} | " +
-            $"Format-Volume -FileSystem {fileSystem} -NewFileSystemLabel '{Quote(label)}' -Confirm:$false -Force | Out-Null");
+            $"Format-Volume -FileSystem {fileSystem} -NewFileSystemLabel '{Quote(label)}'{full} -Confirm:$false -Force | Out-Null");
     }
 
     /// <summary>Crea una partizione in uno spazio non allocato. fileSystem vuoto = non formattare.</summary>
-    public static Task CreateAsync(int diskNumber, ulong offset, ulong size, string fileSystem, string label)
+    public static Task CreateAsync(int diskNumber, ulong offset, ulong size, ulong gapEnd, string fileSystem, string label)
     {
         if (fileSystem.Length > 0) Validate(fileSystem, label);
         ulong alignedOffset = (offset + MiB - 1) / MiB * MiB;
 
+        // Se si chiede tutto lo spazio libero, lascia decidere a Windows: i byte persi
+        // nell'allineamento fanno altrimenti fallire con "Not enough available capacity".
+        // Il margine di 4 MiB copre lo spazio che Windows tiene per sé (es. fine disco MBR).
+        bool wantsMaximum = alignedOffset + size + 4 * MiB >= gapEnd;
+        string sizeArg = wantsMaximum ? "-UseMaximumSize" : $"-Size {size}";
         string script =
-            $"$p = New-Partition -DiskNumber {diskNumber} -Offset {alignedOffset} -Size {size} -AssignDriveLetter; ";
+            $"$p = New-Partition -DiskNumber {diskNumber} -Offset {alignedOffset} {sizeArg} -AssignDriveLetter; ";
         if (fileSystem.Length > 0)
             script += $"$p | Format-Volume -FileSystem {fileSystem} -NewFileSystemLabel '{Quote(label)}' -Confirm:$false -Force | Out-Null";
         return PowerShellRunner.RunAsync(script);

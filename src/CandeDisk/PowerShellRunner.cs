@@ -16,7 +16,7 @@ public static class PowerShellRunner
     {
         // -EncodedCommand evita ogni problema di quoting; gli errori diventano exit code 1 + stderr.
         string wrapped =
-            "$ErrorActionPreference='Stop'; [Console]::OutputEncoding=[Text.Encoding]::UTF8; " +
+            "$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'; [Console]::OutputEncoding=[Text.Encoding]::UTF8; " +
             "try { " + script + " } catch { [Console]::Error.WriteLine($_.Exception.Message); exit 1 }";
         string encoded = Convert.ToBase64String(Encoding.Unicode.GetBytes(wrapped));
 
@@ -64,9 +64,21 @@ public static class PowerShellRunner
         await process.WaitForExitAsync();
 
         string output = await stdout;
-        string error = (await stderr).Trim();
+        string error = CleanError((await stderr).Trim());
         if (process.ExitCode != 0)
             throw new DiskOperationException(string.IsNullOrEmpty(error) ? output.Trim() : error);
         return output;
+    }
+
+    /// <summary>PowerShell con stderr rediretto emette XML (CLIXML): estrae solo i messaggi di errore.</summary>
+    private static string CleanError(string error)
+    {
+        if (!error.StartsWith("#< CLIXML")) return error;
+
+        var messages = System.Text.RegularExpressions.Regex
+            .Matches(error, "<S S=\"Error\">(.*?)</S>", System.Text.RegularExpressions.RegexOptions.Singleline)
+            .Select(m => m.Groups[1].Value.Replace("_x000D_", "").Replace("_x000A_", "\n").Trim())
+            .Where(s => s.Length > 0);
+        return string.Join("\n", messages);
     }
 }

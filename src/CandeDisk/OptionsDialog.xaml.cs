@@ -14,6 +14,7 @@ public partial class OptionsDialog : Window
     public ulong SizeMb { get; private set; }
     public string FileSystem { get; private set; } = "";
     public string VolumeLabel { get; private set; } = "";
+    public bool QuickFormat => QuickBox.IsChecked == true;
 
     /// <summary>Etichetta proposta all'apertura della finestra.</summary>
     public string InitialLabel
@@ -26,9 +27,10 @@ public partial class OptionsDialog : Window
         string message,
         bool askSize = false, ulong minMb = 0, ulong maxMb = 0, ulong defaultMb = 0,
         bool askFileSystem = false, bool allowNoFormat = false,
-        bool askLabel = false)
+        bool askLabel = false, bool askQuick = false)
     {
         InitializeComponent();
+        QuickBox.Visibility = askQuick ? Visibility.Visible : Visibility.Collapsed;
         Title = title;
         MessageText.Text = message;
 

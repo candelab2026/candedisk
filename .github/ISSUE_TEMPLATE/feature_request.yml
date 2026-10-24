@@ -1,0 +1,21 @@
+name: Proponi una funzione
+description: Un'idea per migliorare CandeDisk
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Che problema vuoi risolvere?
+      description: Descrivi la situazione in cui ti serve questa funzione.
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Come lo immagini?
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: Alternative considerate

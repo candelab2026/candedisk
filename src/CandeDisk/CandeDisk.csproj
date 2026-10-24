@@ -8,11 +8,25 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>CandeDisk</RootNamespace>
     <AssemblyName>CandeDisk</AssemblyName>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+
+    <Version>1.0.0</Version>
+    <Product>CandeDisk</Product>
+    <Authors>CandeLab</Authors>
+    <Description>Gestione di dischi e partizioni per Windows</Description>
+    <Copyright>Copyright (c) 2026 CandeLab</Copyright>
   </PropertyGroup>
 
   <!-- In Release l'exe chiede l'elevazione UAC; in Debug parte in sola lettura. -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+    <Resource Include="Assets\logo.png" />
+    <!-- La guida è un solo file: docs/GUIDA.md, letto da GitHub e mostrato nell'app. -->
+    <EmbeddedResource Include="..\..\docs\GUIDA.md" LogicalName="GUIDA.md" />
+  </ItemGroup>
 
 </Project>

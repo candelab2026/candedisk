@@ -1,0 +1,52 @@
+name: Segnala un problema
+description: Qualcosa non funziona come dovrebbe
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Grazie per la segnalazione! **Non includere dati personali** nel log o nel riepilogo.
+        Per le vulnerabilità di sicurezza usa la segnalazione privata (vedi SECURITY.md).
+  - type: textarea
+    id: cosa
+    attributes:
+      label: Cosa è successo?
+      description: Cosa stavi facendo e cosa ti aspettavi.
+    validations:
+      required: true
+  - type: textarea
+    id: passi
+    attributes:
+      label: Come riprodurlo
+      placeholder: |
+        1. Seleziono il disco ...
+        2. Premo Formatta ...
+    validations:
+      required: true
+  - type: textarea
+    id: errore
+    attributes:
+      label: Messaggio di errore
+      description: Il testo completo mostrato dal programma.
+      render: text
+  - type: input
+    id: versione
+    attributes:
+      label: Versione di CandeDisk
+      description: Menu Aiuto > Informazioni.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Versione di Windows
+      placeholder: "Windows 11 23H2"
+    validations:
+      required: true
+  - type: textarea
+    id: riepilogo
+    attributes:
+      label: Riepilogo dei dischi
+      description: Menu File > Copia riepilogo dei dischi, poi incolla qui.
+      render: text
