@@ -2,7 +2,7 @@
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.1.0] - 2026-10-25
 
 ### Added
 - Interface and in-app guide in nine languages: English, Italiano, Español, Français, Deutsch, Português, Русский, 简体中文 and 日本語.
