@@ -1,7 +1,8 @@
 <Window x:Class="CandeDisk.AboutWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Informazioni su CandeDisk" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
+        xmlns:l="clr-namespace:CandeDisk"
+        Title="{l:T AboutTitle, Plain=True}" SizeToContent="WidthAndHeight" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Icon="Assets/app.ico">
     <StackPanel Margin="24" Width="420">
         <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
@@ -9,20 +10,20 @@
             <StackPanel Margin="16,0,0,0" VerticalAlignment="Center">
                 <TextBlock Text="CandeDisk" FontSize="26" FontWeight="SemiBold" Foreground="#14233C" />
                 <TextBlock x:Name="VersionText" Foreground="#555" />
-                <TextBlock Text="Gestione di dischi e partizioni per Windows" Foreground="#555" Margin="0,2,0,0" />
+                <TextBlock Text="{l:T AboutTagline}" Foreground="#555" Margin="0,2,0,0" TextWrapping="Wrap" />
             </StackPanel>
         </StackPanel>
 
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"
-                   Text="Formatta, crea, elimina e ridimensiona le partizioni con una interfaccia semplice, usando le funzioni di archiviazione di Windows. Il programma è gratuito e open source." />
+                   Text="{l:T AboutDescription}" />
 
         <TextBlock TextWrapping="Wrap" Background="#FFF4CE" Padding="10,8" Margin="0,0,0,12">
-            <Run FontWeight="SemiBold" Text="Attenzione: " />
-            <Run Text="le operazioni sui dischi cancellano dati in modo irreversibile. Fai sempre un backup prima di procedere. Il software è fornito senza alcuna garanzia." />
+            <Run FontWeight="SemiBold" Text="{l:T AboutWarningLabel}" />
+            <Run Text="{l:T AboutWarning}" />
         </TextBlock>
 
-        <TextBlock Margin="0,0,0,4">
-            <Run Text="Licenza MIT · Copyright © 2026 CandeLab" />
+        <TextBlock Margin="0,0,0,4" TextWrapping="Wrap">
+            <Run Text="{l:T AboutLicense}" />
         </TextBlock>
         <TextBlock Margin="0,0,0,16">
             <Hyperlink NavigateUri="https://github.com/candelab2026/candedisk" RequestNavigate="Link_RequestNavigate">
@@ -30,7 +31,7 @@
             </Hyperlink>
         </TextBlock>
 
-        <Button Content="Chiudi" IsDefault="True" IsCancel="True" HorizontalAlignment="Right"
+        <Button Content="{l:T AboutClose}" IsDefault="True" IsCancel="True" HorizontalAlignment="Right"
                 MinWidth="90" Padding="8,3" />
     </StackPanel>
 </Window>

@@ -47,16 +47,16 @@ public sealed class PartitionInfo
     public string OffsetText => SizeFormat.Bytes(Offset);
 
     public string TypeText => IsFree
-        ? "Non allocato"
+        ? Loc.T("Unallocated")
         : Type switch
         {
-            "System" => "EFI (sistema)",
-            "Reserved" => "MSR (riservata)",
-            "Recovery" => "Ripristino",
-            "Basic" => "Dati",
-            "IFS" => "Dati (IFS)",
-            "Logical" => "Logica",
-            "Extended" => "Estesa",
+            "System" => Loc.T("TypeEfi"),
+            "Reserved" => Loc.T("TypeMsr"),
+            "Recovery" => Loc.T("TypeRecovery"),
+            "Basic" => Loc.T("TypeData"),
+            "IFS" => Loc.T("TypeDataIfs"),
+            "Logical" => Loc.T("TypeLogical"),
+            "Extended" => Loc.T("TypeExtended"),
             "" => "",
             _ => Type,
         };
@@ -67,16 +67,16 @@ public sealed class PartitionInfo
         {
             if (IsFree) return "";
             var flags = new List<string>();
-            if (IsBoot) flags.Add("Windows");
-            if (IsSystem) flags.Add("Avvio");
-            if (IsActive) flags.Add("Attiva");
-            if (IsHidden) flags.Add("Nascosta");
+            if (IsBoot) flags.Add(Loc.T("FlagWindows"));
+            if (IsSystem) flags.Add(Loc.T("FlagBoot"));
+            if (IsActive) flags.Add(Loc.T("FlagActive"));
+            if (IsHidden) flags.Add(Loc.T("FlagHidden"));
             return string.Join(", ", flags);
         }
     }
 
     public string BarLabel => IsFree
-        ? $"Non allocato\n{SizeText}"
+        ? $"{Loc.T("Unallocated")}\n{SizeText}"
         : $"{(Letter != "" ? Letter + " " : "")}{Label}\n{SizeText}\n{FileSystem}".Trim();
 }
 
@@ -97,12 +97,12 @@ public sealed class DiskInfo
     public List<PartitionInfo> Rows { get; private set; } = new();
 
     public bool IsRaw => PartitionStyle.Equals("RAW", StringComparison.OrdinalIgnoreCase);
-    public string Title => $"Disco {Number}";
+    public string Title => Loc.F("DiskTitle", Number);
     public string Subtitle =>
         $"{FriendlyName} · {SizeFormat.Bytes(Size)} · {PartitionStyle}" +
-        (IsBoot ? " · DISCO DI SISTEMA" : "") +
-        (IsOffline ? " · offline" : "") +
-        (IsReadOnly ? " · sola lettura" : "");
+        (IsBoot ? " · " + Loc.T("DiskFlagSystem") : "") +
+        (IsOffline ? " · " + Loc.T("DiskFlagOffline") : "") +
+        (IsReadOnly ? " · " + Loc.T("DiskFlagReadOnly") : "");
 
     private const ulong MiB = 1024UL * 1024UL;
 

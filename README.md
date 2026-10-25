@@ -1,105 +1,122 @@
 ﻿<p align="center">
-  <img src="assets/logo.png" alt="Logo di CandeDisk" width="128" />
+  <img src="assets/logo.png" alt="CandeDisk logo" width="128" />
 </p>
 
 <h1 align="center">CandeDisk</h1>
 
 <p align="center">
-  Gestione di dischi e partizioni per Windows: formatta, crea, elimina e ridimensiona con un'interfaccia semplice.
+  A disk and partition manager for Windows: format, create, delete and resize partitions with a simple interface.
 </p>
 
 <p align="center">
   <a href="https://github.com/candelab2026/candedisk/actions/workflows/build.yml"><img alt="Build" src="https://github.com/candelab2026/candedisk/actions/workflows/build.yml/badge.svg" /></a>
-  <a href="LICENSE"><img alt="Licenza MIT" src="https://img.shields.io/badge/licenza-MIT-blue.svg" /></a>
-  <img alt="Piattaforma" src="https://img.shields.io/badge/piattaforma-Windows%2011-0078D6.svg" />
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2011-0078D6.svg" />
   <img alt=".NET 9" src="https://img.shields.io/badge/.NET-9-512BD4.svg" />
 </p>
 
-<p align="center">
-  <b>Italiano</b> · <a href="README.en.md">English</a>
-</p>
+![CandeDisk screenshot](docs/images/screenshot.png)
 
-![Schermata di CandeDisk](docs/images/screenshot.png)
+> The screenshot uses **demo mode** with sample data, not real disks.
 
-> La schermata usa la **modalità demo** con dati di esempio, non dischi reali.
+## Why CandeDisk
 
-## Perché CandeDisk
+Windows *Disk Management* works, but it sometimes gets in the way: "Delete Volume" greyed out on some partitions, "Extend" disabled without explanation, unclear errors. CandeDisk uses the same Windows storage functions, but:
 
-*Gestione disco* di Windows funziona, ma a volte si blocca: "Elimina volume" disattivato su alcune partizioni, "Estendi" grigio senza spiegazioni, nessun messaggio chiaro quando qualcosa non va. CandeDisk usa le stesse funzioni di archiviazione di Windows, ma:
+- shows **all disks, partitions and unallocated space** in one view, with a colour-coded map;
+- can delete **protected partitions** (EFI, OEM, recovery) through `diskpart`, after explicit confirmations;
+- explains errors in readable language and keeps an **operation log**;
+- **protects** you from the worst mistakes (it won't touch the running Windows or the boot partition).
 
-- mostra **tutti i dischi, le partizioni e lo spazio non allocato** in una sola vista, con una mappa colorata;
-- permette di eliminare anche le **partizioni protette** (EFI, OEM, ripristino) con `diskpart`, dopo conferme esplicite;
-- spiega gli errori in modo leggibile e li registra in un **log delle operazioni**;
-- ti **protegge** dagli errori più gravi (non tocca il Windows in uso né la partizione di avvio).
+## Features
 
-## Funzioni
-
-| Funzione | Descrizione |
+| Feature | Description |
 |---|---|
-| Elenco dischi | Dischi, partizioni, file system, spazio libero, stato (Windows, EFI, attiva, nascosta) |
-| Mappa del disco | Barra proporzionale cliccabile con colori per tipo di partizione |
-| Inizializza | Prepara un disco nuovo con tabella GPT |
-| Crea | Nuova partizione nello spazio non allocato, con file system ed etichetta |
-| Formatta | NTFS, exFAT, FAT32; formattazione rapida o completa |
-| Ridimensiona | Riduce o estende una partizione entro i limiti reali calcolati da Windows |
-| Elimina | Anche le partizioni protette, con doppia/tripla conferma |
-| Guida e log | Guida integrata (`F1`), registro delle operazioni, copia del riepilogo negli appunti |
+| Disk list | Disks, partitions, file systems, free space, status (Windows, EFI, active, hidden) |
+| Disk map | Clickable proportional bar, colour-coded by partition type |
+| Initialize | Prepare a new disk with a GPT partition table |
+| Create | New partition in unallocated space, with file system and label |
+| Format | NTFS, exFAT, FAT32; quick or full format |
+| Resize | Shrink or extend a partition within the real limits reported by Windows |
+| Delete | Including protected partitions, with double/triple confirmation |
+| Guide and log | Built-in guide (`F1`), operation log, copy the summary to the clipboard |
+| Languages | English, Italiano, Español, Français, Deutsch, Português, Русский, 简体中文, 日本語 |
 
-Il programma è in italiano. Le versioni future potranno aggiungere altre lingue.
+## Languages
 
-## Requisiti
+CandeDisk starts in your Windows language (English if yours is not available) and you can switch at any time from the **Language** menu: the choice is immediate and remembered. The in-app guide is translated too.
 
-- Windows 11 (64 bit), su cui è stato provato. Windows 10 dovrebbe funzionare perché usa le stesse funzioni di archiviazione, ma **non è stato verificato**.
-- Privilegi di **amministratore** per modificare i dischi (senza, il programma funziona in sola lettura)
-
-## Installazione
-
-1. Scarica l'ultima versione dalla pagina [**Releases**](https://github.com/candelab2026/candedisk/releases).
-2. Estrai lo zip e avvia `CandeDisk.exe`: Windows chiederà la conferma dell'amministratore (UAC).
-
-L'eseguibile della release include il runtime .NET, non devi installare nulla.
-
-Per compilarlo tu stesso, vedi [Compilare dal codice sorgente](#compilare-dal-codice-sorgente).
-
-## Uso rapido
-
-1. Seleziona un disco a sinistra.
-2. Seleziona una partizione (o una riga **Non allocato**) nella tabella o nella mappa.
-3. Usa la barra degli strumenti, i menu o le scorciatoie:
-
-| Scorciatoia | Azione |
+| Language | Guide |
 |---|---|
-| `F5` | Aggiorna |
-| `Ctrl+N` | Crea partizione |
-| `Ctrl+Maiusc+F` | Formatta |
-| `Ctrl+R` | Ridimensiona |
-| `Canc` | Elimina (con il focus sulla tabella) |
-| `F1` | Guida |
+| English | [docs/guide/en.md](docs/guide/en.md) |
+| Italiano | [docs/guide/it.md](docs/guide/it.md) |
+| Español | [docs/guide/es.md](docs/guide/es.md) |
+| Français | [docs/guide/fr.md](docs/guide/fr.md) |
+| Deutsch | [docs/guide/de.md](docs/guide/de.md) |
+| Português | [docs/guide/pt.md](docs/guide/pt.md) |
+| Русский | [docs/guide/ru.md](docs/guide/ru.md) |
+| 简体中文 | [docs/guide/zh.md](docs/guide/zh.md) |
+| 日本語 | [docs/guide/ja.md](docs/guide/ja.md) |
 
-Guida completa: [docs/GUIDA.md](docs/GUIDA.md).
+Want to add or improve a translation? See [CONTRIBUTING.md](CONTRIBUTING.md#translations).
 
-## Sicurezza
+## Requirements
 
-Le operazioni sui dischi **cancellano dati in modo irreversibile**. Fai sempre un backup.
+- Windows 11 (64-bit), where it has been tested. Windows 10 should work because it uses the same storage functions, but it is **not verified**.
+- **Administrator** rights to change disks (without them the program runs in read-only mode).
 
-- Non si possono formattare né eliminare la partizione di Windows in uso, l'unità di sistema e la partizione EFI del disco di avvio.
-- Ogni operazione distruttiva richiede una doppia conferma con il nome del disco; una terza per le partizioni speciali.
-- Dischi offline o in sola lettura non vengono modificati.
-- Il software è fornito **senza alcuna garanzia** (vedi [LICENSE](LICENSE)). Prima di usarlo su dati importanti, provalo su un disco virtuale o su una chiavetta di prova.
+## Installation
 
-Per segnalare una vulnerabilità leggi [SECURITY.md](SECURITY.md).
+1. Download the latest version from the [**Releases**](https://github.com/candelab2026/candedisk/releases) page.
+2. Extract the zip and run `CandeDisk.exe`: Windows will ask for administrator confirmation (UAC).
 
-## Modalità demo
+The release executable includes the .NET runtime, so you don't need to install anything else.
 
-Per provare l'interfaccia senza toccare nessun disco:
+> **Windows SmartScreen** may show a "Windows protected your PC" warning the first time, because the program is not code-signed and is new. Click **More info** > **Run anyway**, and check the SHA-256 checksum published with each release first.
+
+To build it yourself, see [Build from source](#build-from-source).
+
+## Quick start
+
+1. Select a disk on the left.
+2. Select a partition (or an **Unallocated** row) in the table or in the map.
+3. Use the toolbar, the menus or the shortcuts:
+
+| Shortcut | Action |
+|---|---|
+| `F5` | Refresh |
+| `Ctrl+N` | Create partition |
+| `Ctrl+Shift+F` | Format |
+| `Ctrl+R` | Resize |
+| `Del` | Delete (with the focus on the table) |
+| `F1` | Guide |
+
+Full guide: [docs/guide/en.md](docs/guide/en.md).
+
+## Safety
+
+Disk operations **permanently erase data**. Always back up first.
+
+- The running Windows partition, the system drive and the EFI partition of the boot disk cannot be formatted or deleted.
+- Every destructive operation needs a double confirmation showing the disk name, and a third one for special partitions.
+- Offline or read-only disks are never modified.
+- The software is provided **without any warranty** (see [LICENSE](LICENSE)). Before using it on important data, try it on a virtual disk or a spare USB drive.
+
+To report a vulnerability, read [SECURITY.md](SECURITY.md).
+
+## Demo mode
+
+To try the interface without touching any disk:
 
 ```powershell
 CandeDisk.exe --demo
 ```
 
-## Compilare dal codice sorgente
+Other options: `--lang <code>` (for example `--lang de`) starts in a given language for that run only.
 
-Serve l'[SDK .NET 9](https://dotnet.microsoft.com/download).
+## Build from source
+
+Requires the [.NET 9 SDK](https://dotnet.microsoft.com/download).
 
 ```powershell
 git clone https://github.com/candelab2026/candedisk.git
@@ -108,40 +125,40 @@ dotnet build src/CandeDisk -c Release
 dotnet run --project src/CandeDisk
 ```
 
-Una build **Debug** parte senza richiedere l'amministratore (sola lettura, con un pulsante per riavviarsi con i permessi). Una build **Release** richiede l'UAC all'avvio.
+A **Debug** build starts without asking for administrator rights (read-only, with a button to restart with permissions). A **Release** build asks for UAC at startup.
 
-Test automatici (non toccano nessun disco):
+Automated tests (they never touch a disk):
 
 ```powershell
 dotnet test
 ```
 
-Per provare le operazioni vere usa un disco virtuale, non i tuoi dischi: vedi [CONTRIBUTING.md](CONTRIBUTING.md) e `scripts/TestDisk.ps1`.
+To try real operations use a virtual disk, not your own disks: see [CONTRIBUTING.md](CONTRIBUTING.md) and `scripts/TestDisk.ps1`.
 
-Per creare l'eseguibile autonomo:
+To produce the standalone executable:
 
 ```powershell
 dotnet publish src/CandeDisk -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o dist
 ```
 
-L'eseguibile risultante pesa circa 60 MB perché include il runtime .NET.
+The resulting executable is about 60 MB because it includes the .NET runtime.
 
-## Come funziona
+## How it works
 
-CandeDisk è un'applicazione WPF (C#, .NET 9) che comanda il modulo *Storage* di Windows tramite PowerShell (`Get-Disk`, `Get-Partition`, `New-Partition`, `Resize-Partition`, `Format-Volume`, `Remove-Partition`) e, come ripiego per le partizioni protette, `diskpart`. Non scrive direttamente sui settori del disco. Dettagli in [docs/ARCHITETTURA.md](docs/ARCHITETTURA.md).
+CandeDisk is a WPF application (C#, .NET 9) that drives the Windows *Storage* module through PowerShell (`Get-Disk`, `Get-Partition`, `New-Partition`, `Resize-Partition`, `Format-Volume`, `Remove-Partition`) and, as a fallback for protected partitions, `diskpart`. It never writes directly to disk sectors. Details in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Limiti noti e idee future
+## Known limitations and future ideas
 
-- Lo **spostamento** di partizioni (per unire spazio non adiacente) non è ancora supportato: è l'operazione più rischiosa.
-- Dischi dinamici e RAID software non sono gestiti.
-- Idee: clonazione di partizioni, controllo dello stato SMART, altre lingue, tema scuro.
+- **Moving** partitions (to merge non-adjacent space) is not supported yet: it is the riskiest operation.
+- Dynamic disks and software RAID are not handled.
+- Ideas: partition cloning, SMART status, dark theme.
 
-Vedi il [CHANGELOG](CHANGELOG.md) e le [issue](https://github.com/candelab2026/candedisk/issues).
+See the [CHANGELOG](CHANGELOG.md) and the [issues](https://github.com/candelab2026/candedisk/issues).
 
-## Contribuire
+## Contributing
 
-Contributi, segnalazioni e idee sono benvenuti. Leggi [CONTRIBUTING.md](CONTRIBUTING.md) e il [Codice di condotta](CODE_OF_CONDUCT.md).
+Contributions, reports and ideas are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-## Licenza
+## License
 
-Rilasciato con licenza [MIT](LICENSE). Copyright © 2026 CandeLab.
+Released under the [MIT](LICENSE) license. Copyright © 2026 CandeLab.

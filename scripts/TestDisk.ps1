@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-  Crea o rimuove un disco virtuale (VHDX) per provare CandeDisk senza toccare i dischi reali.
+  Creates or removes a virtual disk (VHDX) to try CandeDisk without touching real disks.
 
 .DESCRIPTION
-  Il disco viene creato vuoto e non inizializzato (RAW), così si può provare anche "Inizializza".
-  Richiede PowerShell avviato come amministratore.
+  The disk is created empty and uninitialized (RAW), so "Initialize" can be tried too.
+  Requires PowerShell started as administrator.
 
 .EXAMPLE
   .\scripts\TestDisk.ps1 -Action Create -SizeMB 2048
@@ -24,9 +24,9 @@ $ErrorActionPreference = 'Stop'
 
 $admin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
     [Security.Principal.WindowsBuiltInRole]::Administrator)
-if (-not $admin) { throw 'Avvia PowerShell come amministratore.' }
+if (-not $admin) { throw 'Start PowerShell as administrator.' }
 
-# Percorso fisso e dedicato: lo script non tocca mai altri file.
+# Fixed, dedicated path: the script never touches any other file.
 $vhd = Join-Path $env:TEMP 'CandeDiskTest.vhdx'
 
 function Invoke-DiskPart([string]$commands) {
@@ -34,22 +34,22 @@ function Invoke-DiskPart([string]$commands) {
     Set-Content -Path $script -Value $commands -Encoding ASCII
     try {
         $out = diskpart /s $script
-        if ($LASTEXITCODE -ne 0) { throw "diskpart ha fallito:`n$($out -join "`n")" }
+        if ($LASTEXITCODE -ne 0) { throw "diskpart failed:`n$($out -join "`n")" }
     }
     finally { Remove-Item $script -Force -ErrorAction SilentlyContinue }
 }
 
 switch ($Action) {
     'Create' {
-        if (Test-Path $vhd) { throw "Esiste già $vhd. Esegui prima: -Action Remove" }
+        if (Test-Path $vhd) { throw "$vhd already exists. Run first: -Action Remove" }
         Invoke-DiskPart "create vdisk file=`"$vhd`" maximum=$SizeMB type=expandable`nattach vdisk"
-        Write-Host "Disco virtuale da $SizeMB MB creato e collegato: $vhd"
-        Write-Host 'Aprilo in CandeDisk (Aggiorna): compare come disco RAW, non inizializzato.'
+        Write-Host "Virtual disk of $SizeMB MB created and attached: $vhd"
+        Write-Host 'Open it in CandeDisk (Refresh): it appears as a RAW, uninitialized disk.'
     }
     'Remove' {
-        if (-not (Test-Path $vhd)) { Write-Host 'Nessun disco di prova da rimuovere.'; return }
+        if (-not (Test-Path $vhd)) { Write-Host 'No test disk to remove.'; return }
         Invoke-DiskPart "select vdisk file=`"$vhd`"`ndetach vdisk"
         Remove-Item $vhd -Force
-        Write-Host 'Disco virtuale scollegato e cancellato.'
+        Write-Host 'Virtual disk detached and deleted.'
     }
 }

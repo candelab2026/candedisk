@@ -1,29 +1,41 @@
 # Changelog
 
-Il formato segue [Keep a Changelog](https://keepachangelog.com/it-IT/1.1.0/) e il progetto usa il [versionamento semantico](https://semver.org/lang/it/).
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [semantic versioning](https://semver.org/).
+
+## [Unreleased]
+
+### Added
+- Interface and in-app guide in nine languages: English, Italiano, Español, Français, Deutsch, Português, Русский, 简体中文 and 日本語.
+- **Language** menu: the change is immediate (no restart, no new UAC prompt) and is remembered. The first start uses the Windows language, with English as fallback.
+- `--lang <code>` command-line option to start in a given language for one run.
+- Translations are plain `Languages/xx.lang` files, so adding a language needs no code. Tests check that every language has all the keys, the same placeholders as English, and a guide.
+
+### Changed
+- GitHub pages (README, contributing, security, architecture, templates) are now in English. The guide moved to `docs/guide/xx.md`, one file per language.
+- Log lines are always written in English, whatever the interface language.
 
 ## [1.0.0] - 2026-10-24
 
-Prima versione.
+First release.
 
-### Aggiunto
-- Elenco di dischi e partizioni con mappa proporzionale cliccabile e spazio non allocato.
-- Inizializzazione dei dischi (GPT).
-- Creazione di partizioni (NTFS, exFAT, FAT32 o senza formattazione).
-- Formattazione rapida o completa.
-- Ridimensionamento (riduzione ed estensione) entro i limiti supportati da Windows.
-- Eliminazione di partizioni, comprese quelle protette (EFI, OEM, ripristino) tramite `diskpart`.
-- Protezioni: blocco di Windows in uso e partizione di avvio, doppia e tripla conferma, dischi offline o in sola lettura.
-- Menu, barra degli strumenti con icone, menu contestuale e scorciatoie da tastiera.
-- Guida integrata (`F1`) e finestra Informazioni.
-- Registro delle operazioni in `%LocalAppData%\CandeDisk\logs`.
-- Modalità `--demo` con dati di esempio.
-- Logo e icona dell'applicazione.
-- Test automatici (`dotnet test`) e script `scripts/TestDisk.ps1` per provare l'app su un disco virtuale.
+### Added
+- List of disks and partitions with a clickable proportional map and unallocated space.
+- Disk initialization (GPT).
+- Partition creation (NTFS, exFAT, FAT32 or unformatted).
+- Quick or full format.
+- Resize (shrink and extend) within the limits supported by Windows.
+- Deleting partitions, including protected ones (EFI, OEM, recovery) through `diskpart`.
+- Safety rules: the running Windows and the boot partition are blocked, double and triple confirmation, offline or read-only disks.
+- Menus, toolbar with icons, context menu and keyboard shortcuts.
+- Built-in guide (`F1`) and About window.
+- Operation log in `%LocalAppData%\CandeDisk\logs`.
+- `--demo` mode with sample data.
+- Logo and application icon.
+- Automated tests (`dotnet test`) and the `scripts/TestDisk.ps1` script to try the app on a virtual disk.
 
-### Corretto
-- Creando una partizione non compaiono più le finestre di Windows "È necessario formattare il disco" ed "Impossibile accedere a E:\". La partizione nasce senza lettera, viene formattata e solo dopo riceve la lettera; durante l'operazione il rilevamento hardware della shell viene sospeso e sempre ripristinato.
+### Fixed
+- Creating a partition no longer shows the Windows "You need to format the disk" and "E:\ is not accessible" windows. The partition is created without a letter, formatted, and only then given its letter; the shell hardware detection is paused meanwhile and always restored.
 
-### Sicurezza
-- Il ripiego su `diskpart ... delete partition override` scatta solo per le partizioni speciali (EFI, OEM, ripristino). Per le altre un errore di Windows, ad esempio un volume in uso, ferma l'operazione.
-- Etichette e file system vengono validati prima di costruire gli script PowerShell, con test dedicati contro l'iniezione di comandi.
+### Security
+- The `diskpart ... delete partition override` fallback only runs for special partitions (EFI, OEM, recovery). For the others a Windows error, such as a volume in use, stops the operation.
+- Labels and file systems are validated before building the PowerShell scripts, with dedicated tests against command injection.

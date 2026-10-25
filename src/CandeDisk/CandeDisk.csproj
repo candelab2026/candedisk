@@ -13,7 +13,7 @@
     <Version>1.0.0</Version>
     <Product>CandeDisk</Product>
     <Authors>CandeLab</Authors>
-    <Description>Gestione di dischi e partizioni per Windows</Description>
+    <Description>Disk and partition manager for Windows</Description>
     <Copyright>Copyright (c) 2026 CandeLab</Copyright>
   </PropertyGroup>
 
@@ -29,8 +29,12 @@
   <ItemGroup>
     <Resource Include="Assets\app.ico" />
     <Resource Include="Assets\logo.png" />
-    <!-- La guida è un solo file: docs/GUIDA.md, letto da GitHub e mostrato nell'app. -->
-    <EmbeddedResource Include="..\..\docs\GUIDA.md" LogicalName="GUIDA.md" />
+    <!-- Una guida per lingua (docs/guide/xx.md): la stessa letta su GitHub e mostrata nell'app.
+         Il nome logico è guide.xx.md; i file non portano "guide." nel nome perché MSBuild
+         scambierebbe "guide.de.md" per una risorsa localizzata e la metterebbe in un assembly satellite. -->
+    <EmbeddedResource Include="..\..\docs\guide\*.md" LogicalName="guide.%(Filename)%(Extension)" />
+    <!-- Traduzioni dell'interfaccia: aggiungere una lingua = aggiungere un file .lang. -->
+    <EmbeddedResource Include="Languages\*.lang" LogicalName="lang.%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

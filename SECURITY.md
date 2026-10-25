@@ -1,27 +1,27 @@
-# Politica di sicurezza
+# Security policy
 
-CandeDisk lavora con privilegi di amministratore e modifica i dischi: la sicurezza è importante.
+CandeDisk runs with administrator rights and modifies disks, so security matters.
 
-## Versioni supportate
+## Supported versions
 
-Viene mantenuta solo l'ultima versione pubblicata nella pagina [Releases](https://github.com/candelab2026/candedisk/releases).
+Only the latest version published on the [Releases](https://github.com/candelab2026/candedisk/releases) page is maintained.
 
-## Segnalare una vulnerabilità
+## Reporting a vulnerability
 
-**Non aprire una issue pubblica.** Usa la segnalazione privata di GitHub:
+**Do not open a public issue.** Use GitHub's private reporting:
 
-1. Vai nella scheda **Security** del repository.
-2. Scegli **Report a vulnerability**.
-3. Descrivi il problema, come riprodurlo e l'impatto.
+1. Go to the **Security** tab of the repository.
+2. Choose **Report a vulnerability**.
+3. Describe the problem, how to reproduce it and its impact.
 
-Risponderemo appena possibile e ti terremo aggiornato fino alla correzione. Una volta rilasciata la correzione, il problema potrà essere reso pubblico, citandoti se lo desideri.
+We will reply as soon as possible and keep you updated until it is fixed. Once the fix is released, the issue can be made public, crediting you if you wish.
 
-## Cosa consideriamo un problema di sicurezza
+## What we consider a security issue
 
-- Esecuzione di comandi non previsti (ad esempio iniezione nei comandi PowerShell o `diskpart` tramite etichette, nomi o altri campi).
-- Aggiramento delle protezioni che impediscono di cancellare il sistema in uso.
-- Scrittura di file o dati sensibili in posizioni non sicure.
+- Execution of unintended commands (for example injection into the PowerShell or `diskpart` commands through labels, names or other fields).
+- Bypassing the protections that stop you deleting the running system.
+- Writing files or sensitive data to unsafe locations.
 
-## Nota sull'uso
+## A note on usage
 
-CandeDisk è fornito senza garanzie (vedi [LICENSE](LICENSE)). La perdita di dati causata da un uso errato non è una vulnerabilità, ma una segnalazione di miglioramento delle protezioni è sempre benvenuta come issue.
+CandeDisk is provided without warranty (see [LICENSE](LICENSE)). Data loss caused by misuse is not a vulnerability, but a suggestion to improve the protections is always welcome as an issue.

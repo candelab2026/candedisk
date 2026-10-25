@@ -1,14 +1,15 @@
-## Cosa cambia
+## What changes
 
-<!-- Descrivi la modifica e il motivo. Collega l'issue, se c'è: "Chiude #123". -->
+<!-- Describe the change and the reason. Link the issue, if any: "Closes #123". -->
 
-## Come l'ho provata
+## How I tested it
 
-<!-- Ad esempio: `--demo` per l'interfaccia, un disco virtuale (VHDX) per le operazioni sui dischi. -->
+<!-- For example: `--demo` for the interface, a virtual disk (VHDX) for disk operations. -->
 
-## Controlli
+## Checklist
 
-- [ ] `dotnet build` e `dotnet test` terminano senza errori né avvisi
-- [ ] Ho provato le operazioni sui dischi **solo** su dischi virtuali o di prova
-- [ ] Le nuove operazioni passano da `Safety`, chiedono conferma e scrivono nel log
-- [ ] Ho aggiornato `docs/GUIDA.md` e `CHANGELOG.md`, se la modifica è visibile all'utente
+- [ ] `dotnet build` and `dotnet test` finish with no errors or warnings
+- [ ] I tried disk operations **only** on virtual or spare disks
+- [ ] New operations go through `Safety`, ask for confirmation and write to the log
+- [ ] New user-facing text is in the `.lang` files (all languages, or English with a note)
+- [ ] I updated `docs/guide/en.md` and `CHANGELOG.md` if the change is visible to users

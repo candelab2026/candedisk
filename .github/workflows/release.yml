@@ -1,6 +1,6 @@
 name: Release
 
-# Si avvia quando crei un tag di versione, ad esempio: git tag v1.0.0 && git push origin v1.0.0
+# Runs when you push a version tag, for example: git tag v1.0.0 && git push origin v1.0.0
 on:
   push:
     tags: ["v*"]
@@ -18,7 +18,7 @@ jobs:
         with:
           dotnet-version: 9.0.x
 
-      - name: Pubblica (eseguibile unico con runtime incluso)
+      - name: Publish (single executable with the runtime included)
         run: >
           dotnet publish src/CandeDisk -c Release -r win-x64
           --self-contained true -p:PublishSingleFile=true
@@ -26,14 +26,14 @@ jobs:
           -p:EnableCompressionInSingleFile=true
           -o dist
 
-      - name: Crea l'archivio
+      - name: Create the archive
         shell: pwsh
         run: |
           $name = "CandeDisk-${{ github.ref_name }}-win-x64.zip"
           Compress-Archive -Path dist/CandeDisk.exe, README.md, LICENSE -DestinationPath $name
           "ASSET=$name" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Pubblica la release
+      - name: Publish the release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.ASSET }}

@@ -13,22 +13,22 @@ public static class Safety
     /// <summary>Motivo per cui l'azione è vietata, oppure null se consentita.</summary>
     public static string? BlockReason(DiskInfo disk, PartitionInfo partition, PartitionAction action)
     {
-        if (partition.IsFree) return "Seleziona una partizione, non lo spazio non allocato.";
-        if (disk.IsOffline) return "Il disco è offline.";
-        if (disk.IsReadOnly) return "Il disco è in sola lettura.";
+        if (partition.IsFree) return Loc.T("SafetySelectPartition");
+        if (disk.IsOffline) return Loc.T("SafetyOffline");
+        if (disk.IsReadOnly) return Loc.T("SafetyReadOnly");
 
         // Ridimensionare la partizione di Windows è un'operazione normale e supportata.
         if (action == PartitionAction.Resize) return null;
 
         if (partition.IsBoot)
-            return "Questa partizione contiene il Windows attualmente in esecuzione.";
+            return Loc.T("SafetyRunningWindows");
         if (disk.IsBoot && partition.IsSystem)
-            return "Questa è la partizione di avvio (EFI) del sistema attualmente in uso.";
+            return Loc.T("SafetyBootEfi");
 
         string? systemDrive = Environment.GetEnvironmentVariable("SystemDrive")?.TrimEnd(':');
         if (!string.IsNullOrEmpty(systemDrive) &&
             string.Equals(partition.DriveLetter, systemDrive, StringComparison.OrdinalIgnoreCase))
-            return $"{systemDrive}: è l'unità di sistema.";
+            return Loc.F("SafetySystemDrive", systemDrive);
 
         return null;
     }
@@ -38,10 +38,9 @@ public static class Safety
     {
         if (partition.IsFree) return null;
         if (partition.IsSpecial)
-            return "È una partizione speciale (EFI/ripristino/riservata). Cancellarla o formattarla può " +
-                   "impedire l'avvio di un sistema o rimuovere l'ambiente di ripristino.";
+            return Loc.T("WarnSpecial");
         if (disk.IsBoot || disk.IsSystem)
-            return "Si trova sul disco di sistema.";
+            return Loc.T("WarnSystemDisk");
         return null;
     }
 

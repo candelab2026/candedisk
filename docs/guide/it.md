@@ -9,6 +9,7 @@ CandeDisk è un gestore di dischi e partizioni per Windows: mostra i tuoi dischi
 - Avvia CandeDisk. Per modificare i dischi servono i privilegi di **amministratore**: la versione Release li chiede da sola (finestra UAC).
 - Se il programma parte senza privilegi, mostra un banner giallo e lavora in **sola lettura**. Il pulsante **Riavvia come amministratore** lo riapre con i permessi necessari.
 - A sinistra c'è l'elenco dei dischi. A destra trovi la mappa del disco selezionato e la tabella delle partizioni.
+- Per cambiare lingua usa il menu **Lingua**: il cambio è immediato e viene ricordato.
 
 ## La mappa del disco
 

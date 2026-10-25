@@ -46,13 +46,13 @@ public partial class OptionsDialog : Window
 
         if (askSize)
         {
-            SizeLabel.Text = $"Dimensione in MB (da {minMb} a {maxMb})";
+            SizeLabel.Text = Loc.F("DlgSizeLabel", minMb, maxMb);
             SizeBox.Text = defaultMb.ToString();
         }
         if (askFileSystem)
         {
             foreach (var fs in DiskService.FileSystems) FsBox.Items.Add(fs);
-            if (allowNoFormat) FsBox.Items.Add("(non formattare)");
+            if (allowNoFormat) FsBox.Items.Add(Loc.T("DlgNoFormat"));
             FsBox.SelectedIndex = 0;
         }
     }
@@ -63,7 +63,7 @@ public partial class OptionsDialog : Window
         {
             if (!ulong.TryParse(SizeBox.Text.Trim(), out ulong mb) || mb < _minMb || mb > _maxMb)
             {
-                MessageBox.Show(this, $"Inserisci un numero intero tra {_minMb} e {_maxMb}.",
+                MessageBox.Show(this, Loc.F("DlgBadSize", _minMb, _maxMb),
                     Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -72,8 +72,8 @@ public partial class OptionsDialog : Window
 
         if (_askFs)
         {
-            string selected = (string)FsBox.SelectedItem;
-            FileSystem = selected.StartsWith('(') ? "" : selected;
+            // L'ultima voce, se presente, è "non formattare": le altre sono i file system in lista chiusa.
+            FileSystem = FsBox.SelectedIndex < DiskService.FileSystems.Length ? DiskService.FileSystems[FsBox.SelectedIndex] : "";
         }
 
         if (_askLabel)
@@ -81,7 +81,7 @@ public partial class OptionsDialog : Window
             string label = LabelBox.Text.Trim();
             if (!Safety.IsValidLabel(label))
             {
-                MessageBox.Show(this, "L'etichetta può contenere solo lettere, numeri, spazio, _ - .",
+                MessageBox.Show(this, Loc.T("DlgBadLabel"),
                     Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }

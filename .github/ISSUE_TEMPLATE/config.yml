@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Guida all'uso
-    url: https://github.com/candelab2026/candedisk/blob/main/docs/GUIDA.md
-    about: Leggi prima la guida: potrebbe già rispondere alla tua domanda.
+  - name: User guide
+    url: https://github.com/candelab2026/candedisk/blob/main/docs/guide/en.md
+    about: Read the guide first: it may already answer your question.

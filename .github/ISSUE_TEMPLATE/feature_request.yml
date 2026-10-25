@@ -1,21 +1,21 @@
-name: Proponi una funzione
-description: Un'idea per migliorare CandeDisk
+name: Suggest a feature
+description: An idea to improve CandeDisk
 labels: ["enhancement"]
 body:
   - type: textarea
-    id: problema
+    id: problem
     attributes:
-      label: Che problema vuoi risolvere?
-      description: Descrivi la situazione in cui ti serve questa funzione.
+      label: What problem do you want to solve?
+      description: Describe the situation in which you need this feature.
     validations:
       required: true
   - type: textarea
-    id: proposta
+    id: proposal
     attributes:
-      label: Come lo immagini?
+      label: How do you imagine it?
     validations:
       required: true
   - type: textarea
-    id: alternative
+    id: alternatives
     attributes:
-      label: Alternative considerate
+      label: Alternatives considered

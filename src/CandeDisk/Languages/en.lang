@@ -1,0 +1,168 @@
+# CandeDisk - English (base language: every key must exist here)
+# Format: Key = text   ("\n" = new line, {0} {1} ... = values filled in by the program)
+# To add a language: copy this file as xx.lang, translate the values and add docs/guide/xx.md.
+@Name = English
+@Culture = en-US
+
+# ---- main window ----
+WindowTitle = CandeDisk {0} - Disk manager
+MenuFile = _File
+MenuRefresh = _Refresh
+MenuElevate = Restart as _administrator
+MenuCopySummary = Copy disk _summary
+MenuExit = E_xit
+MenuDisk = _Disk
+MenuInit = _Initialize (GPT)
+MenuPartition = _Partition
+MenuCreate = _Create partition...
+MenuFormat = _Format...
+MenuResize = _Resize...
+MenuDelete = _Delete...
+MenuLanguage = _Language
+MenuHelp = _Help
+MenuGuide = _Guide
+MenuOpenLogs = Open _logs folder
+MenuWebsite = Project on _GitHub
+MenuAbout = _About CandeDisk
+GestureFormat = Ctrl+Shift+F
+GestureDelete = Del
+BannerReadOnly = Read-only mode: formatting, creating, deleting or resizing needs administrator rights.
+BannerElevate = Restart as administrator
+TbRefresh = Refresh
+TbInit = Initialize
+TbCreate = Create
+TbFormat = Format
+TbResize = Resize
+TbDelete = Delete
+TbHelp = Guide
+TipRefresh = Reload disks and partitions (F5)
+TipInit = Prepare a new disk with a GPT partition table
+TipCreate = Create a partition in the unallocated space (Ctrl+N)
+TipFormat = Format the selected partition (Ctrl+Shift+F)
+TipResize = Shrink or extend the selected partition (Ctrl+R)
+TipDelete = Delete the selected partition (Del)
+TipHelp = Open the guide (F1)
+LegendWindows = Windows
+LegendSpecial = Special (EFI, recovery)
+LegendData = Data
+LegendFree = Unallocated
+ColDrive = Drive
+ColLabel = Label
+ColFileSystem = File system
+ColType = Type
+ColSize = Size
+ColFree = Free
+ColStatus = Status
+ModeDemo = DEMO MODE: sample data, no changes to disks
+ModeAdmin = Administrator
+ModeReadOnly = Read-only
+
+# ---- disks and partitions ----
+DiskTitle = Disk {0}
+DiskFlagSystem = SYSTEM DISK
+DiskFlagOffline = offline
+DiskFlagReadOnly = read-only
+Unallocated = Unallocated
+TypeEfi = EFI (system)
+TypeMsr = MSR (reserved)
+TypeRecovery = Recovery
+TypeData = Data
+TypeDataIfs = Data (IFS)
+TypeLogical = Logical
+TypeExtended = Extended
+FlagWindows = Windows
+FlagBoot = Boot
+FlagActive = Active
+FlagHidden = Hidden
+
+# ---- status bar ----
+StatusReady = Ready
+StatusReading = Reading disks...
+StatusDisksFound = {0} disks found
+StatusReadError = Error reading disks
+StatusInitializing = Initializing disk {0}...
+StatusCreating = Creating the partition...
+StatusFormatting = Formatting...
+StatusFormattingFull = Full format in progress (this can take a long time)...
+StatusDeleting = Deleting...
+StatusResizing = Resizing...
+StatusCalcSizes = Calculating supported sizes...
+StatusDone = Operation completed
+StatusFailed = Operation failed
+StatusSummaryCopied = Summary copied to the clipboard
+
+# ---- messages and confirmations ----
+ErrorTitle = Error
+ConfirmTitle = Confirm
+ConfirmDestructiveTitle = Confirm destructive operation
+AttentionTitle = Warning
+ConfirmContinue = {0}\n\nDo you really want to continue?
+MsgDemo = Demo mode: the data is sample data and no operation is performed.
+MsgDiskOfflineOrRO = The disk is offline or read-only.
+MsgGapTooSmall = The unallocated space is too small.
+MsgNoResize = This partition can be neither shrunk nor extended (no space available).
+MsgResizeUnavailable = Cannot resize this partition:\n{0}
+MsgBlocked = Operation blocked for safety:\n{0}
+ConfirmInit = Initialize Disk {0} - {1} ({2}) with a GPT partition table?
+ConfirmCreate = Create a {0} partition on Disk {1} - {2} ({3})?
+NoFormat = no formatting
+FormatQuick = quick
+FormatFull = full
+ConfirmFormat = Format ({0}) partition {1} of Disk {2} - {3} as {4}?\nALL DATA on it will be erased.
+ConfirmDelete = Delete partition {0} of Disk {1} - {2}?\nALL DATA on it will be erased.
+ConfirmShrink = Shrink partition {0} of Disk {1} - {2} from {3} to {4}?\nBack up your important data first.
+ConfirmExtend = Extend partition {0} of Disk {1} - {2} from {3} to {4}?
+UnhandledError = An unexpected error occurred:\n\n{0}\n\nDetails are in the log file (Help > Open logs folder).
+
+# ---- safety rules ----
+SafetySelectPartition = Select a partition, not the unallocated space.
+SafetyOffline = The disk is offline.
+SafetyReadOnly = The disk is read-only.
+SafetyRunningWindows = This partition contains the Windows that is currently running.
+SafetyBootEfi = This is the boot (EFI) partition of the system currently in use.
+SafetySystemDrive = {0}: is the system drive.
+WarnSpecial = This is a special partition (EFI/recovery/reserved). Deleting or formatting it can prevent a system from starting or remove the recovery environment.
+WarnSystemDisk = It is on the system disk.
+
+# ---- errors ----
+ErrFileSystem = Unsupported file system: {0}
+ErrBadLabel = The label may only contain letters, numbers, space, _ - . (max 32).
+ErrProcess = Unable to start the process.
+
+# ---- options dialog ----
+DlgCreateTitle = Create partition
+DlgCreateMsg = New partition in the {0} of unallocated space on Disk {1} ({2}).
+DlgFormatTitle = Format partition
+DlgFormatMsg = Format partition {0} of Disk {1} - {2} ({3}).
+DlgResizeTitle = Resize partition
+DlgResizeMsg = Partition {0} of Disk {1}: currently {2}.\nTo extend it, unallocated space is needed right after the partition.
+DlgSizeLabel = Size in MB (from {0} to {1})
+DlgFileSystem = File system
+DlgNoFormat = (do not format)
+DlgQuick = Quick format (recommended)
+DlgLabel = Volume label
+DlgOk = OK
+DlgCancel = Cancel
+DlgBadSize = Enter a whole number between {0} and {1}.
+DlgBadLabel = The label may only contain letters, numbers, space, _ - .
+
+# ---- help and about ----
+HelpTitle = CandeDisk guide
+HelpMissingTitle = Guide unavailable
+HelpMissingText = The guide file is not included in this version.
+AboutTitle = About CandeDisk
+AboutTagline = Disk and partition manager for Windows
+AboutDescription = Format, create, delete and resize partitions with a simple interface, using the Windows storage functions. The program is free and open source.
+AboutWarningLabel = Warning:
+AboutWarning = disk operations permanently erase data. Always back up before proceeding. The software is provided without any warranty.
+AboutLicense = MIT License · Copyright © 2026 CandeLab
+AboutVersion = Version {0}
+AboutClose = Close
+
+# ---- demo data (--demo) ----
+DemoExternal = External drive 2 TB
+DemoStick = USB flash drive 64 GB
+DemoRecovery = Recovery
+DemoArchive = Archive
+DemoBackup = Backup
+DemoStickLabel = FLASH

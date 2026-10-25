@@ -58,7 +58,7 @@ public static class PowerShellRunner
 
     private static async Task<string> RunProcessAsync(ProcessStartInfo psi)
     {
-        using var process = Process.Start(psi) ?? throw new DiskOperationException("Impossibile avviare il processo.");
+        using var process = Process.Start(psi) ?? throw new DiskOperationException(Loc.T("ErrProcess"));
         Task<string> stdout = process.StandardOutput.ReadToEndAsync();
         Task<string> stderr = process.StandardError.ReadToEndAsync();
         await process.WaitForExitAsync();

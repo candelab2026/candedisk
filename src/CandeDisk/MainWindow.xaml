@@ -1,7 +1,8 @@
 <Window x:Class="CandeDisk.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="CandeDisk - Gestione dischi" Width="1120" Height="720" MinWidth="900" MinHeight="540"
+        xmlns:l="clr-namespace:CandeDisk"
+        Title="CandeDisk" Width="1120" Height="720" MinWidth="900" MinHeight="540"
         WindowStartupLocation="CenterScreen" Icon="Assets/app.ico"
         Loaded="Window_Loaded" PreviewKeyDown="Window_PreviewKeyDown">
 
@@ -18,56 +19,58 @@
 
     <DockPanel Background="White">
         <Menu DockPanel.Dock="Top" Padding="2,2">
-            <MenuItem Header="_File">
-                <MenuItem x:Name="MenuRefresh" Header="_Aggiorna" InputGestureText="F5" Click="Refresh_Click">
+            <MenuItem Header="{l:T MenuFile}">
+                <MenuItem x:Name="MenuRefresh" Header="{l:T MenuRefresh}" InputGestureText="F5" Click="Refresh_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconRefresh}" /></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MenuElevate" Header="Riavvia come a_mministratore" Click="Elevate_Click">
+                <MenuItem x:Name="MenuElevate" Header="{l:T MenuElevate}" Click="Elevate_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconShield}" /></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Copia _riepilogo dei dischi" Click="CopySummary_Click">
+                <MenuItem Header="{l:T MenuCopySummary}" Click="CopySummary_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconCopy}" /></MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="_Esci" InputGestureText="Alt+F4" Click="Exit_Click">
+                <MenuItem Header="{l:T MenuExit}" InputGestureText="Alt+F4" Click="Exit_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconExit}" /></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
 
-            <MenuItem Header="_Disco">
-                <MenuItem x:Name="MenuInit" Header="_Inizializza (GPT)" Click="Init_Click">
+            <MenuItem Header="{l:T MenuDisk}">
+                <MenuItem x:Name="MenuInit" Header="{l:T MenuInit}" Click="Init_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconInit}" /></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
 
-            <MenuItem Header="_Partizione">
-                <MenuItem x:Name="MenuCreate" Header="_Crea partizione..." InputGestureText="Ctrl+N" Click="Create_Click">
+            <MenuItem Header="{l:T MenuPartition}">
+                <MenuItem x:Name="MenuCreate" Header="{l:T MenuCreate}" InputGestureText="Ctrl+N" Click="Create_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconCreate}" /></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MenuFormat" Header="_Formatta..." InputGestureText="Ctrl+Maiusc+F" Click="Format_Click">
+                <MenuItem x:Name="MenuFormat" Header="{l:T MenuFormat}" InputGestureText="{l:T GestureFormat}" Click="Format_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconFormat}" /></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MenuResize" Header="_Ridimensiona..." InputGestureText="Ctrl+R" Click="Resize_Click">
+                <MenuItem x:Name="MenuResize" Header="{l:T MenuResize}" InputGestureText="Ctrl+R" Click="Resize_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconResize}" /></MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="MenuDelete" Header="_Elimina..." InputGestureText="Canc" Click="Delete_Click">
+                <MenuItem x:Name="MenuDelete" Header="{l:T MenuDelete}" InputGestureText="{l:T GestureDelete}" Click="Delete_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconDelete}" /></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
 
-            <MenuItem Header="_Aiuto">
-                <MenuItem Header="_Guida" InputGestureText="F1" Click="Help_Click">
+            <MenuItem x:Name="MenuLanguage" Header="{l:T MenuLanguage}" />
+
+            <MenuItem Header="{l:T MenuHelp}">
+                <MenuItem Header="{l:T MenuGuide}" InputGestureText="F1" Click="Help_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconHelp}" /></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Apri cartella dei _log" Click="OpenLogs_Click">
+                <MenuItem Header="{l:T MenuOpenLogs}" Click="OpenLogs_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconLog}" /></MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Sito del progetto su _GitHub" Click="Website_Click">
+                <MenuItem Header="{l:T MenuWebsite}" Click="Website_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconWeb}" /></MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="_Informazioni su CandeDisk" Click="About_Click">
+                <MenuItem Header="{l:T MenuAbout}" Click="About_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconInfo}" /></MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -78,64 +81,64 @@
                 <Button x:Name="ElevateButton" DockPanel.Dock="Right" Padding="10,3" Margin="12,0,0,0" Click="Elevate_Click">
                     <StackPanel Orientation="Horizontal">
                         <Path Style="{StaticResource Icon}" Data="{StaticResource IconShield}" Width="16" Height="16" />
-                        <TextBlock Style="{StaticResource ToolText}" Text="Riavvia come amministratore" />
+                        <TextBlock Style="{StaticResource ToolText}" Text="{l:T BannerElevate}" />
                     </StackPanel>
                 </Button>
                 <TextBlock x:Name="BannerText" VerticalAlignment="Center" TextWrapping="Wrap"
-                           Text="Modalità sola lettura: per formattare, creare, eliminare o ridimensionare servono i privilegi di amministratore." />
+                           Text="{l:T BannerReadOnly}" />
             </DockPanel>
         </Border>
 
         <ToolBar DockPanel.Dock="Top" ToolBarTray.IsLocked="True">
-            <Button Style="{StaticResource ToolButton}" x:Name="RefreshButton" Click="Refresh_Click" ToolTip="Rilegge dischi e partizioni (F5)">
+            <Button Style="{StaticResource ToolButton}" x:Name="RefreshButton" Click="Refresh_Click" ToolTip="{l:T TipRefresh}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconRefresh}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Aggiorna" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbRefresh}" />
                 </StackPanel>
             </Button>
             <Separator />
-            <Button Style="{StaticResource ToolButton}" x:Name="InitButton" Click="Init_Click" ToolTip="Prepara un disco nuovo con tabella GPT">
+            <Button Style="{StaticResource ToolButton}" x:Name="InitButton" Click="Init_Click" ToolTip="{l:T TipInit}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconInit}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Inizializza" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbInit}" />
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource ToolButton}" x:Name="CreateButton" Click="Create_Click" ToolTip="Crea una partizione nello spazio non allocato (Ctrl+N)">
+            <Button Style="{StaticResource ToolButton}" x:Name="CreateButton" Click="Create_Click" ToolTip="{l:T TipCreate}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconCreate}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Crea" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbCreate}" />
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource ToolButton}" x:Name="FormatButton" Click="Format_Click" ToolTip="Formatta la partizione selezionata (Ctrl+Maiusc+F)">
+            <Button Style="{StaticResource ToolButton}" x:Name="FormatButton" Click="Format_Click" ToolTip="{l:T TipFormat}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconFormat}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Formatta" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbFormat}" />
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource ToolButton}" x:Name="ResizeButton" Click="Resize_Click" ToolTip="Riduce o estende la partizione selezionata (Ctrl+R)">
+            <Button Style="{StaticResource ToolButton}" x:Name="ResizeButton" Click="Resize_Click" ToolTip="{l:T TipResize}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconResize}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Ridimensiona" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbResize}" />
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource ToolButton}" x:Name="DeleteButton" Click="Delete_Click" ToolTip="Elimina la partizione selezionata (Canc)">
+            <Button Style="{StaticResource ToolButton}" x:Name="DeleteButton" Click="Delete_Click" ToolTip="{l:T TipDelete}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconDelete}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Elimina" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbDelete}" />
                 </StackPanel>
             </Button>
             <Separator />
-            <Button Style="{StaticResource ToolButton}" Click="Help_Click" ToolTip="Apre la guida (F1)">
+            <Button Style="{StaticResource ToolButton}" Click="Help_Click" ToolTip="{l:T TipHelp}">
                 <StackPanel Orientation="Horizontal">
                     <Path Style="{StaticResource Icon}" Data="{StaticResource IconHelp}" />
-                    <TextBlock Style="{StaticResource ToolText}" Text="Guida" />
+                    <TextBlock Style="{StaticResource ToolText}" Text="{l:T TbHelp}" />
                 </StackPanel>
             </Button>
         </ToolBar>
 
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock x:Name="StatusText" Text="Pronto" />
+                <TextBlock x:Name="StatusText" Text="{l:T StatusReady}" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock x:Name="ModeText" Foreground="#555" />
@@ -179,13 +182,13 @@
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
                     <Border Width="12" Height="12" Background="#1F6FD1" Margin="0,0,5,0" />
-                    <TextBlock Text="Windows" Margin="0,0,14,0" Foreground="#555" />
+                    <TextBlock Text="{l:T LegendWindows}" Margin="0,0,14,0" Foreground="#555" />
                     <Border Width="12" Height="12" Background="#C98A10" Margin="0,0,5,0" />
-                    <TextBlock Text="Speciale (EFI, ripristino)" Margin="0,0,14,0" Foreground="#555" />
+                    <TextBlock Text="{l:T LegendSpecial}" Margin="0,0,14,0" Foreground="#555" />
                     <Border Width="12" Height="12" Background="#4F9D6B" Margin="0,0,5,0" />
-                    <TextBlock Text="Dati" Margin="0,0,14,0" Foreground="#555" />
+                    <TextBlock Text="{l:T LegendData}" Margin="0,0,14,0" Foreground="#555" />
                     <Border Width="12" Height="12" Background="#E4E4E4" Margin="0,0,5,0" />
-                    <TextBlock Text="Non allocato" Foreground="#555" />
+                    <TextBlock Text="{l:T LegendFree}" Foreground="#555" />
                 </StackPanel>
 
                 <DataGrid x:Name="PartitionGrid" Grid.Row="3" AutoGenerateColumns="False" IsReadOnly="True"
@@ -194,30 +197,30 @@
                           SelectionChanged="PartitionGrid_SelectionChanged">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Crea partizione..." Click="Create_Click">
+                            <MenuItem Header="{l:T MenuCreate, Plain=True}" Click="Create_Click">
                                 <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconCreate}" /></MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Formatta..." Click="Format_Click">
+                            <MenuItem Header="{l:T MenuFormat, Plain=True}" Click="Format_Click">
                                 <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconFormat}" /></MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="Ridimensiona..." Click="Resize_Click">
+                            <MenuItem Header="{l:T MenuResize, Plain=True}" Click="Resize_Click">
                                 <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconResize}" /></MenuItem.Icon>
                             </MenuItem>
                             <Separator />
-                            <MenuItem Header="Elimina..." Click="Delete_Click">
+                            <MenuItem Header="{l:T MenuDelete, Plain=True}" Click="Delete_Click">
                                 <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconDelete}" /></MenuItem.Icon>
                             </MenuItem>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding Number}" Width="40" />
-                        <DataGridTextColumn Header="Unità" Binding="{Binding Letter}" Width="55" />
-                        <DataGridTextColumn Header="Etichetta" Binding="{Binding Label}" Width="*" />
-                        <DataGridTextColumn Header="File system" Binding="{Binding FileSystem}" Width="85" />
-                        <DataGridTextColumn Header="Tipo" Binding="{Binding TypeText}" Width="120" />
-                        <DataGridTextColumn Header="Dimensione" Binding="{Binding SizeText}" Width="95" />
-                        <DataGridTextColumn Header="Libero" Binding="{Binding FreeText}" Width="95" />
-                        <DataGridTextColumn Header="Stato" Binding="{Binding FlagsText}" Width="130" />
+                        <DataGridTextColumn Header="{l:T ColDrive}" Binding="{Binding Letter}" Width="65" />
+                        <DataGridTextColumn Header="{l:T ColLabel}" Binding="{Binding Label}" Width="*" />
+                        <DataGridTextColumn Header="{l:T ColFileSystem}" Binding="{Binding FileSystem}" Width="95" />
+                        <DataGridTextColumn Header="{l:T ColType}" Binding="{Binding TypeText}" Width="120" />
+                        <DataGridTextColumn Header="{l:T ColSize}" Binding="{Binding SizeText}" Width="95" />
+                        <DataGridTextColumn Header="{l:T ColFree}" Binding="{Binding FreeText}" Width="95" />
+                        <DataGridTextColumn Header="{l:T ColStatus}" Binding="{Binding FlagsText}" Width="130" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

@@ -18,22 +18,22 @@ public static class DemoData
                     Part(1, "", 260 * MiB, "System", "FAT32", "EFI", system: true),
                     Part(2, "", 16 * MiB, "Reserved", "", ""),
                     Part(3, "C", 930 * GiB, "Basic", "NTFS", "Windows", boot: true, free: 410 * GiB),
-                    Part(4, "", 1 * GiB, "Recovery", "NTFS", "Ripristino", free: 300 * MiB)),
+                    Part(4, "", 1 * GiB, "Recovery", "NTFS", Loc.T("DemoRecovery"), free: 300 * MiB)),
             },
             new()
             {
-                Number = 1, FriendlyName = "Disco esterno 2 TB", Size = 2000 * GiB, PartitionStyle = "GPT",
+                Number = 1, FriendlyName = Loc.T("DemoExternal"), Size = 2000 * GiB, PartitionStyle = "GPT",
                 BusType = "USB",
                 Partitions = Sequence(2000 * GiB,
-                    Part(1, "D", 1200 * GiB, "Basic", "NTFS", "Archivio", free: 540 * GiB),
-                    Part(2, "E", 600 * GiB, "Basic", "exFAT", "Backup", free: 210 * GiB)),
+                    Part(1, "D", 1200 * GiB, "Basic", "NTFS", Loc.T("DemoArchive"), free: 540 * GiB),
+                    Part(2, "E", 600 * GiB, "Basic", "exFAT", Loc.T("DemoBackup"), free: 210 * GiB)),
             },
             new()
             {
-                Number = 2, FriendlyName = "Chiavetta USB 64 GB", Size = 64 * GiB, PartitionStyle = "MBR",
+                Number = 2, FriendlyName = Loc.T("DemoStick"), Size = 64 * GiB, PartitionStyle = "MBR",
                 BusType = "USB",
                 Partitions = Sequence(64 * GiB,
-                    Part(1, "F", 32 * GiB, "IFS", "FAT32", "CHIAVETTA", free: 20 * GiB, active: true)),
+                    Part(1, "F", 32 * GiB, "IFS", "FAT32", Loc.T("DemoStickLabel"), free: 20 * GiB, active: true)),
             },
         };
 

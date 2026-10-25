@@ -159,9 +159,9 @@ public static class DiskService
     private static void Validate(string fileSystem, string label)
     {
         if (!FileSystems.Contains(fileSystem))
-            throw new DiskOperationException($"File system non supportato: {fileSystem}");
+            throw new DiskOperationException(Loc.F("ErrFileSystem", fileSystem));
         if (!Safety.IsValidLabel(label))
-            throw new DiskOperationException("L'etichetta può contenere solo lettere, numeri, spazio, _ - . (max 32).");
+            throw new DiskOperationException(Loc.T("ErrBadLabel"));
     }
 
     private static string Quote(string value) => value.Replace("'", "''");

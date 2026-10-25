@@ -10,7 +10,7 @@ public partial class AboutWindow : Window
     public AboutWindow()
     {
         InitializeComponent();
-        VersionText.Text = "Versione " + AppInfo.Version;
+        VersionText.Text = Loc.F("AboutVersion", AppInfo.Version);
     }
 
     private void Link_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -42,7 +42,7 @@ public static class AppInfo
         }
         catch (Exception ex)
         {
-            Logger.Write("Impossibile aprire " + url + ": " + ex.Message);
+            Logger.Write("Cannot open " + url + ": " + ex.Message);
         }
     }
 }

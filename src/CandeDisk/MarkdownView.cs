@@ -7,7 +7,7 @@ namespace CandeDisk;
 
 /// <summary>
 /// Mostra un sottoinsieme minimo di Markdown (titoli, elenchi, **grassetto**, `codice`) come FlowDocument.
-/// Serve a usare un solo file (docs/GUIDA.md) sia su GitHub sia nella guida dell'app.
+/// Serve a usare un solo file (docs/guide/xx.md) sia su GitHub sia nella guida dell'app.
 /// </summary>
 public static class MarkdownView
 {

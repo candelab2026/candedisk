@@ -30,11 +30,38 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         AdminBanner.Visibility = _isAdmin ? Visibility.Collapsed : Visibility.Visible;
-        ModeText.Text = AppOptions.Demo ? "MODALITÀ DEMO: dati di esempio, nessuna modifica ai dischi"
-                      : _isAdmin ? "Amministratore"
-                      : "Sola lettura";
-        Title = $"CandeDisk {AppInfo.Version} - Gestione dischi";
-        Logger.Write($"Avvio CandeDisk {AppInfo.Version} (amministratore: {_isAdmin}, demo: {AppOptions.Demo})");
+        ModeText.Text = AppOptions.Demo ? Loc.T("ModeDemo")
+                      : _isAdmin ? Loc.T("ModeAdmin")
+                      : Loc.T("ModeReadOnly");
+        Title = Loc.F("WindowTitle", AppInfo.Version);
+        BuildLanguageMenu();
+        Logger.Write($"Starting CandeDisk {AppInfo.Version} (administrator: {_isAdmin}, demo: {AppOptions.Demo}, language: {Loc.Current})");
+    }
+
+    private void BuildLanguageMenu()
+    {
+        foreach (var language in Loc.Languages)
+        {
+            var item = new MenuItem { Header = language.Name, Tag = language.Code, IsChecked = language.Code == Loc.Current };
+            item.Click += Language_Click;
+            MenuLanguage.Items.Add(item);
+        }
+    }
+
+    /// <summary>Cambia lingua subito: riapre la finestra nella stessa posizione, senza riavviare né richiedere di nuovo l'UAC.</summary>
+    private void Language_Click(object sender, RoutedEventArgs e)
+    {
+        string code = (string)((MenuItem)sender).Tag;
+        if (code == Loc.Current || _busy) return;
+
+        Loc.Set(code);
+        var next = new MainWindow
+        {
+            WindowStartupLocation = WindowStartupLocation.Manual,
+            Left = Left, Top = Top, Width = Width, Height = Height, WindowState = WindowState,
+        };
+        next.Show();
+        Close();
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -49,7 +76,7 @@ public partial class MainWindow : Window
     {
         int? keepDisk = SelectedDisk?.Number ?? AppOptions.SelectDisk;
         int? keepPartition = SelectedRow is { IsFree: false } p ? p.PartitionNumber : null;
-        SetBusy(true, "Lettura dei dischi...");
+        SetBusy(true, Loc.T("StatusReading"));
         try
         {
             _disks = AppOptions.Demo ? DemoData.Disks() : await DiskService.ListAsync();
@@ -60,13 +87,13 @@ public partial class MainWindow : Window
             if (SelectedDisk != null && keepPartition != null)
                 PartitionGrid.SelectedItem = SelectedDisk.Rows.FirstOrDefault(r => !r.IsFree && r.PartitionNumber == keepPartition);
 
-            StatusText.Text = $"{_disks.Count} dischi trovati";
+            StatusText.Text = Loc.F("StatusDisksFound", _disks.Count);
         }
         catch (Exception ex)
         {
-            Logger.Write("Errore nella lettura dei dischi: " + ex.Message);
-            StatusText.Text = "Errore nella lettura dei dischi";
-            MessageBox.Show(this, ex.Message, "Errore", MessageBoxButton.OK, MessageBoxImage.Error);
+            Logger.Write("Error reading disks: " + ex.Message);
+            StatusText.Text = Loc.T("StatusReadError");
+            MessageBox.Show(this, ex.Message, Loc.T("ErrorTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -222,22 +249,22 @@ public partial class MainWindow : Window
             sb.AppendLine($"{disk.Title} - {disk.Subtitle}");
             foreach (var r in disk.Rows)
             {
-                string name = r.IsFree ? "Non allocato" : $"#{r.PartitionNumber} {r.Letter} {r.Label}".Trim();
+                string name = r.IsFree ? Loc.T("Unallocated") : $"#{r.PartitionNumber} {r.Letter} {r.Label}".Trim();
                 sb.AppendLine($"  {name,-28} {r.FileSystem,-8} {r.SizeText,10}  {r.FlagsText}".TrimEnd());
             }
             sb.AppendLine();
         }
         Clipboard.SetText(sb.ToString().TrimEnd());
-        StatusText.Text = "Riepilogo copiato negli appunti";
+        StatusText.Text = Loc.T("StatusSummaryCopied");
     }
 
     private async void Init_Click(object sender, RoutedEventArgs e)
     {
         var disk = SelectedDisk;
         if (disk == null || !disk.IsRaw || BlockDemo()) return;
-        if (!Confirm($"Inizializzare il Disco {disk.Number} - {disk.FriendlyName} ({SizeFormat.Bytes(disk.Size)}) con tabella GPT?")) return;
-        await RunAsync($"Inizializzazione del disco {disk.Number}...",
-            $"INIZIALIZZA disco {disk.Number} ({disk.FriendlyName}) come GPT",
+        if (!Confirm(Loc.F("ConfirmInit", disk.Number, disk.FriendlyName, SizeFormat.Bytes(disk.Size)))) return;
+        await RunAsync(Loc.F("StatusInitializing", disk.Number),
+            $"INITIALIZE disk {disk.Number} ({disk.FriendlyName}) as GPT",
             () => DiskService.InitializeAsync(disk.Number));
     }
 
@@ -248,7 +275,7 @@ public partial class MainWindow : Window
         if (disk == null || gap is not { IsFree: true } || BlockDemo()) return;
         if (disk.IsOffline || disk.IsReadOnly)
         {
-            Warn("Il disco è offline o in sola lettura.");
+            Warn(Loc.T("MsgDiskOfflineOrRO"));
             return;
         }
 
@@ -256,23 +283,23 @@ public partial class MainWindow : Window
         ulong maxMb = gap.End > alignedStart ? (gap.End - alignedStart) / MiB : 0;
         if (maxMb < 1)
         {
-            Warn("Lo spazio non allocato è troppo piccolo.");
+            Warn(Loc.T("MsgGapTooSmall"));
             return;
         }
 
-        var dlg = new OptionsDialog("Crea partizione",
-            $"Nuova partizione nello spazio non allocato di {gap.SizeText} del Disco {disk.Number} ({disk.FriendlyName}).",
+        var dlg = new OptionsDialog(Loc.T("DlgCreateTitle"),
+            Loc.F("DlgCreateMsg", gap.SizeText, disk.Number, disk.FriendlyName),
             askSize: true, minMb: 1, maxMb: maxMb, defaultMb: maxMb,
             askFileSystem: true, allowNoFormat: true, askLabel: true)
         { Owner = this };
         if (dlg.ShowDialog() != true) return;
 
         ulong sizeBytes = dlg.SizeMb * MiB;
-        string fs = dlg.FileSystem.Length > 0 ? dlg.FileSystem : "nessuna formattazione";
-        if (!Confirm($"Creare una partizione da {SizeFormat.Bytes(sizeBytes)} sul Disco {disk.Number} - {disk.FriendlyName} ({fs})?")) return;
+        string fs = dlg.FileSystem.Length > 0 ? dlg.FileSystem : Loc.T("NoFormat");
+        if (!Confirm(Loc.F("ConfirmCreate", SizeFormat.Bytes(sizeBytes), disk.Number, disk.FriendlyName, fs))) return;
 
-        await RunAsync("Creazione della partizione...",
-            $"CREA partizione {SizeFormat.Bytes(sizeBytes)} su disco {disk.Number} ({disk.FriendlyName}), file system: {fs}",
+        await RunAsync(Loc.T("StatusCreating"),
+            $"CREATE partition {SizeFormat.Bytes(sizeBytes)} on disk {disk.Number} ({disk.FriendlyName}), file system: {(dlg.FileSystem.Length > 0 ? dlg.FileSystem : "none")}",
             () => DiskService.CreateAsync(disk.Number, gap.Offset, sizeBytes, gap.End, dlg.FileSystem, dlg.VolumeLabel));
     }
 
@@ -283,19 +310,19 @@ public partial class MainWindow : Window
         if (disk == null || part == null || BlockDemo()) return;
         if (!CheckAllowed(disk, part, PartitionAction.Format)) return;
 
-        var dlg = new OptionsDialog("Formatta partizione",
-            $"Formatta la partizione {part.PartitionNumber} del Disco {disk.Number} - {disk.FriendlyName} ({part.SizeText}).",
+        var dlg = new OptionsDialog(Loc.T("DlgFormatTitle"),
+            Loc.F("DlgFormatMsg", part.PartitionNumber, disk.Number, disk.FriendlyName, part.SizeText),
             askFileSystem: true, askLabel: true, askQuick: true)
         { Owner = this, InitialLabel = part.Label };
         if (dlg.ShowDialog() != true) return;
 
-        string mode = dlg.QuickFormat ? "rapida" : "completa";
         if (!ConfirmDestructive(disk, part,
-                $"Formattare ({mode}) la partizione {Describe(part)} del Disco {disk.Number} - {disk.FriendlyName} come {dlg.FileSystem}?\n" +
-                "TUTTI I DATI presenti verranno cancellati.")) return;
+                Loc.F("ConfirmFormat", Loc.T(dlg.QuickFormat ? "FormatQuick" : "FormatFull"),
+                    Describe(part), disk.Number, disk.FriendlyName, dlg.FileSystem))) return;
 
-        await RunAsync(dlg.QuickFormat ? "Formattazione in corso..." : "Formattazione completa in corso (può richiedere molto tempo)...",
-            $"FORMATTA ({mode}) partizione {Describe(part)} del disco {disk.Number} ({disk.FriendlyName}) come {dlg.FileSystem}",
+        string mode = dlg.QuickFormat ? "quick" : "full";
+        await RunAsync(Loc.T(dlg.QuickFormat ? "StatusFormatting" : "StatusFormattingFull"),
+            $"FORMAT ({mode}) partition {Describe(part)} of disk {disk.Number} ({disk.FriendlyName}) as {dlg.FileSystem}",
             () => DiskService.FormatAsync(disk.Number, part.PartitionNumber, dlg.FileSystem, dlg.VolumeLabel, dlg.QuickFormat));
     }
 
@@ -307,11 +334,10 @@ public partial class MainWindow : Window
         if (!CheckAllowed(disk, part, PartitionAction.Delete)) return;
 
         if (!ConfirmDestructive(disk, part,
-                $"Eliminare la partizione {Describe(part)} del Disco {disk.Number} - {disk.FriendlyName}?\n" +
-                "TUTTI I DATI presenti verranno cancellati.")) return;
+                Loc.F("ConfirmDelete", Describe(part), disk.Number, disk.FriendlyName))) return;
 
-        await RunAsync("Eliminazione in corso...",
-            $"ELIMINA partizione {Describe(part)} del disco {disk.Number} ({disk.FriendlyName})",
+        await RunAsync(Loc.T("StatusDeleting"),
+            $"DELETE partition {Describe(part)} of disk {disk.Number} ({disk.FriendlyName})",
             () => DiskService.DeleteAsync(disk.Number, part.PartitionNumber, part.IsSpecial));
     }
 
@@ -323,20 +349,20 @@ public partial class MainWindow : Window
         if (!CheckAllowed(disk, part, PartitionAction.Resize)) return;
 
         SupportedSize range;
-        SetBusy(true, "Calcolo delle dimensioni supportate...");
+        SetBusy(true, Loc.T("StatusCalcSizes"));
         try
         {
             range = await DiskService.GetSupportedSizeAsync(disk.Number, part.PartitionNumber);
         }
         catch (Exception ex)
         {
-            Logger.Write("Dimensioni supportate non disponibili: " + ex.Message);
-            Warn("Impossibile ridimensionare questa partizione:\n" + ex.Message);
+            Logger.Write("Supported sizes not available: " + ex.Message);
+            Warn(Loc.F("MsgResizeUnavailable", ex.Message));
             return;
         }
         finally
         {
-            SetBusy(false, "Pronto");
+            SetBusy(false, Loc.T("StatusReady"));
         }
 
         ulong minMb = (range.Min + MiB - 1) / MiB;
@@ -344,13 +370,12 @@ public partial class MainWindow : Window
         ulong currentMb = part.Size / MiB;
         if (minMb >= maxMb)
         {
-            Warn("Questa partizione non può essere né ridotta né estesa (nessuno spazio disponibile).");
+            Warn(Loc.T("MsgNoResize"));
             return;
         }
 
-        var dlg = new OptionsDialog("Ridimensiona partizione",
-            $"Partizione {Describe(part)} del Disco {disk.Number}: attuale {part.SizeText}.\n" +
-            "Per estendere serve spazio non allocato subito dopo la partizione.",
+        var dlg = new OptionsDialog(Loc.T("DlgResizeTitle"),
+            Loc.F("DlgResizeMsg", Describe(part), disk.Number, part.SizeText),
             askSize: true, minMb: minMb, maxMb: maxMb, defaultMb: Math.Clamp(currentMb, minMb, maxMb))
         { Owner = this };
         if (dlg.ShowDialog() != true) return;
@@ -359,13 +384,11 @@ public partial class MainWindow : Window
         if (newBytes == part.Size) return;
         bool shrinking = newBytes < part.Size;
 
-        string msg = $"{(shrinking ? "Ridurre" : "Estendere")} la partizione {Describe(part)} del Disco {disk.Number} - {disk.FriendlyName} " +
-                     $"da {part.SizeText} a {SizeFormat.Bytes(newBytes)}?";
-        if (shrinking) msg += "\nFai prima un backup dei dati importanti.";
-        if (!Confirm(msg)) return;
+        if (!Confirm(Loc.F(shrinking ? "ConfirmShrink" : "ConfirmExtend",
+                Describe(part), disk.Number, disk.FriendlyName, part.SizeText, SizeFormat.Bytes(newBytes)))) return;
 
-        await RunAsync("Ridimensionamento in corso...",
-            $"RIDIMENSIONA partizione {Describe(part)} del disco {disk.Number} ({disk.FriendlyName}): {part.SizeText} -> {SizeFormat.Bytes(newBytes)}",
+        await RunAsync(Loc.T("StatusResizing"),
+            $"RESIZE partition {Describe(part)} of disk {disk.Number} ({disk.FriendlyName}): {part.SizeText} -> {SizeFormat.Bytes(newBytes)}",
             () => DiskService.ResizeAsync(disk.Number, part.PartitionNumber, newBytes));
     }
 
@@ -373,19 +396,19 @@ public partial class MainWindow : Window
 
     private async Task RunAsync(string busyMessage, string logLine, Func<Task> operation)
     {
-        Logger.Write("INIZIO  " + logLine);
+        Logger.Write("START   " + logLine);
         SetBusy(true, busyMessage);
         try
         {
             await operation();
             Logger.Write("OK      " + logLine);
-            StatusText.Text = "Operazione completata";
+            StatusText.Text = Loc.T("StatusDone");
         }
         catch (Exception ex)
         {
-            Logger.Write("ERRORE  " + logLine + " -> " + ex.Message);
-            StatusText.Text = "Operazione non riuscita";
-            MessageBox.Show(this, ex.Message, "Operazione non riuscita", MessageBoxButton.OK, MessageBoxImage.Error);
+            Logger.Write("ERROR   " + logLine + " -> " + ex.Message);
+            StatusText.Text = Loc.T("StatusFailed");
+            MessageBox.Show(this, ex.Message, Loc.T("StatusFailed"), MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -397,7 +420,7 @@ public partial class MainWindow : Window
     private bool BlockDemo()
     {
         if (!AppOptions.Demo) return false;
-        Warn("Modalità demo: i dati sono di esempio e nessuna operazione viene eseguita.");
+        Warn(Loc.T("MsgDemo"));
         return true;
     }
 
@@ -405,7 +428,7 @@ public partial class MainWindow : Window
     {
         string? reason = Safety.BlockReason(disk, part, action);
         if (reason == null) return true;
-        Warn("Operazione bloccata per sicurezza:\n" + reason);
+        Warn(Loc.F("MsgBlocked", reason));
         return false;
     }
 
@@ -413,20 +436,20 @@ public partial class MainWindow : Window
         p.Letter != "" ? $"{p.Letter} (#{p.PartitionNumber})" : $"#{p.PartitionNumber}";
 
     private bool Confirm(string message) =>
-        MessageBox.Show(this, message, "Conferma", MessageBoxButton.YesNo, MessageBoxImage.Question,
+        MessageBox.Show(this, message, Loc.T("ConfirmTitle"), MessageBoxButton.YesNo, MessageBoxImage.Question,
             MessageBoxResult.No) == MessageBoxResult.Yes;
 
     /// <summary>Doppia conferma per le operazioni che cancellano dati; terza se la partizione è speciale.</summary>
     private bool ConfirmDestructive(DiskInfo disk, PartitionInfo part, string message)
     {
-        if (MessageBox.Show(this, message, "Conferma operazione distruttiva", MessageBoxButton.YesNo,
+        if (MessageBox.Show(this, message, Loc.T("ConfirmDestructiveTitle"), MessageBoxButton.YesNo,
                 MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes)
             return false;
 
         string? warning = Safety.Warning(disk, part);
         if (warning == null) return true;
 
-        return MessageBox.Show(this, warning + "\n\nVuoi davvero continuare?", "Attenzione",
+        return MessageBox.Show(this, Loc.F("ConfirmContinue", warning), Loc.T("AttentionTitle"),
             MessageBoxButton.YesNo, MessageBoxImage.Stop, MessageBoxResult.No) == MessageBoxResult.Yes;
     }
 

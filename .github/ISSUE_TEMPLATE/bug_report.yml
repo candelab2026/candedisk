@@ -1,52 +1,58 @@
-name: Segnala un problema
-description: Qualcosa non funziona come dovrebbe
+name: Report a problem
+description: Something does not work as it should
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Grazie per la segnalazione! **Non includere dati personali** nel log o nel riepilogo.
-        Per le vulnerabilità di sicurezza usa la segnalazione privata (vedi SECURITY.md).
+        Thanks for reporting! **Do not include personal data** in the log or the summary.
+        For security vulnerabilities use private reporting (see SECURITY.md).
   - type: textarea
-    id: cosa
+    id: what
     attributes:
-      label: Cosa è successo?
-      description: Cosa stavi facendo e cosa ti aspettavi.
+      label: What happened?
+      description: What you were doing and what you expected.
     validations:
       required: true
   - type: textarea
-    id: passi
+    id: steps
     attributes:
-      label: Come riprodurlo
+      label: How to reproduce it
       placeholder: |
-        1. Seleziono il disco ...
-        2. Premo Formatta ...
+        1. I select the disk ...
+        2. I press Format ...
     validations:
       required: true
   - type: textarea
-    id: errore
+    id: error
     attributes:
-      label: Messaggio di errore
-      description: Il testo completo mostrato dal programma.
+      label: Error message
+      description: The full text shown by the program.
       render: text
   - type: input
-    id: versione
+    id: version
     attributes:
-      label: Versione di CandeDisk
-      description: Menu Aiuto > Informazioni.
+      label: CandeDisk version
+      description: Help > About.
       placeholder: "1.0.0"
     validations:
       required: true
   - type: input
     id: windows
     attributes:
-      label: Versione di Windows
+      label: Windows version
       placeholder: "Windows 11 23H2"
     validations:
       required: true
-  - type: textarea
-    id: riepilogo
+  - type: input
+    id: language
     attributes:
-      label: Riepilogo dei dischi
-      description: Menu File > Copia riepilogo dei dischi, poi incolla qui.
+      label: Interface language
+      description: Useful for translation problems.
+      placeholder: "English"
+  - type: textarea
+    id: summary
+    attributes:
+      label: Disk summary
+      description: File > Copy disk summary, then paste here.
       render: text
