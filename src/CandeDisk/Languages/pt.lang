@@ -8,6 +8,7 @@ MenuRefresh = _Atualizar
 MenuElevate = Reiniciar como a_dministrador
 MenuCopySummary = Copiar _resumo dos discos
 MenuExit = _Sair
+MenuStats = Enviar contagem de uso _anónima
 MenuDisk = _Disco
 MenuInit = _Inicializar (GPT)
 MenuPartition = _Partição

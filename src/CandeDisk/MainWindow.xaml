@@ -29,6 +29,7 @@
                 <MenuItem Header="{l:T MenuCopySummary}" Click="CopySummary_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconCopy}" /></MenuItem.Icon>
                 </MenuItem>
+                <MenuItem x:Name="MenuStats" Header="{l:T MenuStats}" IsCheckable="True" Click="Stats_Click" />
                 <Separator />
                 <MenuItem Header="{l:T MenuExit}" InputGestureText="Alt+F4" Click="Exit_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconExit}" /></MenuItem.Icon>

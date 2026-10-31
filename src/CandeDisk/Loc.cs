@@ -58,9 +58,6 @@ public static class Loc
 
     // ---- scelta della lingua ----------------------------------------------
 
-    private static string SettingsFile => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "CandeDisk", "settings.ini");
-
     /// <summary>Lingua all'avvio: quella richiesta da riga di comando, poi quella salvata, poi quella di Windows.</summary>
     public static void Init(string? requested)
     {
@@ -72,15 +69,7 @@ public static class Loc
     public static void Set(string code)
     {
         Use(code);
-        try
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(SettingsFile)!);
-            File.WriteAllText(SettingsFile, "language=" + Current + Environment.NewLine);
-        }
-        catch
-        {
-            // Preferenza non salvata: l'app resta comunque nella lingua scelta per questa sessione.
-        }
+        SettingsStore.Set("language", Current);
     }
 
     private static void Use(string code)
@@ -106,20 +95,7 @@ public static class Loc
         return Tables.ContainsKey(two) ? two : null;
     }
 
-    private static string? ReadSaved()
-    {
-        try
-        {
-            if (!File.Exists(SettingsFile)) return null;
-            foreach (string line in File.ReadAllLines(SettingsFile))
-                if (line.StartsWith("language=")) return line["language=".Length..];
-        }
-        catch
-        {
-            // File illeggibile: si usa la lingua di Windows.
-        }
-        return null;
-    }
+    private static string? ReadSaved() => SettingsStore.Get("language");
 
     // ---- testi ------------------------------------------------------------
 

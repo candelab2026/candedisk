@@ -8,6 +8,7 @@ MenuRefresh = 刷新(_R)
 MenuElevate = 以管理员身份重新启动(_A)
 MenuCopySummary = 复制磁盘摘要(_S)
 MenuExit = 退出(_X)
+MenuStats = 发送匿名使用计数
 MenuDisk = 磁盘(_D)
 MenuInit = 初始化 (GPT)(_I)
 MenuPartition = 分区(_P)

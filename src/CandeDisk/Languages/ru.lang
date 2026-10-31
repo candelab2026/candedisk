@@ -8,6 +8,7 @@ MenuRefresh = _Обновить
 MenuElevate = Перезапустить от имени _администратора
 MenuCopySummary = Копировать _сводку по дискам
 MenuExit = _Выход
+MenuStats = Отправлять _анонимный счётчик использования
 MenuDisk = _Диск
 MenuInit = _Инициализировать (GPT)
 MenuPartition = _Раздел

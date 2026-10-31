@@ -155,6 +155,10 @@ CandeDisk is a WPF application (C#, .NET 9) that drives the Windows *Storage* mo
 
 See the [CHANGELOG](CHANGELOG.md) and the [issues](https://github.com/candelab2026/candedisk/issues).
 
+## Privacy
+
+CandeDisk works offline and has no account. Once a day, at start-up, it sends one anonymous count to `https://candelab.net/stats` (the project's statistics portal) to know how many people use which version: app name, version, `windows` and the interface language. It never sends disk, partition, file or computer information, and no identifier. The hosting provider may keep technical server logs (including IP addresses) for a limited time, as every web server does. You can turn it off any time from **File → Send anonymous usage count**, or by writing `stats=off` in `%LOCALAPPDATA%\CandeDisk\settings.ini`. The code is in `src/CandeDisk/UsageStats.cs`.
+
 ## Contributing
 
 Contributions, reports and ideas are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).

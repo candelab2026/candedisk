@@ -8,6 +8,7 @@ MenuRefresh = 更新(_R)
 MenuElevate = 管理者として再起動(_A)
 MenuCopySummary = ディスクの概要をコピー(_S)
 MenuExit = 終了(_X)
+MenuStats = 匿名の使用回数を送信
 MenuDisk = ディスク(_D)
 MenuInit = 初期化 (GPT)(_I)
 MenuPartition = パーティション(_P)

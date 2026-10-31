@@ -11,6 +11,7 @@ MenuRefresh = _Refresh
 MenuElevate = Restart as _administrator
 MenuCopySummary = Copy disk _summary
 MenuExit = E_xit
+MenuStats = Send _anonymous usage count
 MenuDisk = _Disk
 MenuInit = _Initialize (GPT)
 MenuPartition = _Partition

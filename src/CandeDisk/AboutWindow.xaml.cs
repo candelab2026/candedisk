@@ -30,7 +30,7 @@ public static class AppInfo
         {
             var attr = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>();
             // Rimuove il suffisso "+commit" che il compilatore aggiunge.
-            return attr?.InformationalVersion.Split('+')[0] ?? "1.1.0";
+            return attr?.InformationalVersion.Split('+')[0] ?? "1.2.0";
         }
     }
 

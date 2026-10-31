@@ -66,6 +66,8 @@ public partial class MainWindow : Window
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        MenuStats.IsChecked = UsageStats.Enabled;
+        UsageStats.PingDaily();
         await RefreshAsync();
         if (AppOptions.ScreenshotPath != null) await TakeScreenshotAndExitAsync(AppOptions.ScreenshotPath);
     }
@@ -228,6 +230,8 @@ public partial class MainWindow : Window
     }
 
     private void Exit_Click(object sender, RoutedEventArgs e) => Close();
+
+    private void Stats_Click(object sender, RoutedEventArgs e) => UsageStats.Enabled = MenuStats.IsChecked;
 
     private void Help_Click(object sender, RoutedEventArgs e) => new HelpWindow { Owner = this }.Show();
 

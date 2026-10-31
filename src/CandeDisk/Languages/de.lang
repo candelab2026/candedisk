@@ -8,6 +8,7 @@ MenuRefresh = _Aktualisieren
 MenuElevate = Als _Administrator neu starten
 MenuCopySummary = Datenträger-_Übersicht kopieren
 MenuExit = _Beenden
+MenuStats = _Anonyme Nutzungszählung senden
 MenuDisk = Daten_träger
 MenuInit = _Initialisieren (GPT)
 MenuPartition = _Partition
