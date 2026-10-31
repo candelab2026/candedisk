@@ -21,6 +21,12 @@ MenuHelp = A_iuto
 MenuGuide = _Guida
 MenuOpenLogs = Apri cartella dei _log
 MenuWebsite = Sito del progetto su _GitHub
+MenuUpdates = _Aggiornamenti
+UpdateAvailable = È disponibile CandeDisk {0} (hai la {1}).
+
+Aprire la pagina di download?
+UpdateNone = Hai l'ultima versione di CandeDisk ({0}).
+UpdateError = Impossibile controllare gli aggiornamenti. Verifica la connessione a Internet e riprova.
 MenuAbout = _Informazioni su CandeDisk
 GestureFormat = Ctrl+Maiusc+F
 GestureDelete = Canc

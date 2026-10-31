@@ -159,6 +159,8 @@ See the [CHANGELOG](CHANGELOG.md) and the [issues](https://github.com/candelab20
 
 CandeDisk works offline and has no account. Once a day, at start-up, it sends one anonymous count to `https://candelab.net/stats` (the project's statistics portal) to know how many people use which version: app name, version, `windows` and the interface language. It never sends disk, partition, file or computer information, and no identifier. The hosting provider may keep technical server logs (including IP addresses) for a limited time, as every web server does. You can turn it off any time from **File → Send anonymous usage count**, or by writing `stats=off` in `%LOCALAPPDATA%\CandeDisk\settings.ini`. The code is in `src/CandeDisk/UsageStats.cs`.
 
+At every start it also asks GitHub (`api.github.com`) for the latest release number to tell you if an update exists; nothing is downloaded or installed, and no data about you is sent. **Help → Check for updates** does the same on demand. The code is in `src/CandeDisk/UpdateChecker.cs`.
+
 ## Contributing
 
 Contributions, reports and ideas are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).

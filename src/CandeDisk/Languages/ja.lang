@@ -21,6 +21,12 @@ MenuHelp = ヘルプ(_H)
 MenuGuide = ガイド(_G)
 MenuOpenLogs = ログフォルダーを開く(_O)
 MenuWebsite = GitHub のプロジェクトページ(_W)
+MenuUpdates = 更新を確認
+UpdateAvailable = CandeDisk {0} が公開されています(現在のバージョン: {1})。
+
+ダウンロードページを開きますか?
+UpdateNone = CandeDisk は最新バージョンです({0})。
+UpdateError = 更新を確認できませんでした。インターネット接続を確認して、もう一度お試しください。
 MenuAbout = CandeDisk について(_A)
 GestureFormat = Ctrl+Shift+F
 GestureDelete = Del

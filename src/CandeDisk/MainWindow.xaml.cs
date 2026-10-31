@@ -68,6 +68,7 @@ public partial class MainWindow : Window
     {
         MenuStats.IsChecked = UsageStats.Enabled;
         UsageStats.PingDaily();
+        _ = CheckForUpdatesAsync(manual: false);
         await RefreshAsync();
         if (AppOptions.ScreenshotPath != null) await TakeScreenshotAndExitAsync(AppOptions.ScreenshotPath);
     }
@@ -236,6 +237,33 @@ public partial class MainWindow : Window
     private void Help_Click(object sender, RoutedEventArgs e) => new HelpWindow { Owner = this }.Show();
 
     private void About_Click(object sender, RoutedEventArgs e) => new AboutWindow { Owner = this }.ShowDialog();
+
+    private async void Updates_Click(object sender, RoutedEventArgs e) => await CheckForUpdatesAsync(manual: true);
+
+    /// <summary>All'apertura controlla in silenzio e avvisa solo se c'è una versione nuova; dal menu risponde sempre.</summary>
+    private async Task CheckForUpdatesAsync(bool manual)
+    {
+        if (!manual && (AppOptions.Demo || AppOptions.ScreenshotPath != null)) return;
+        try
+        {
+            var update = await UpdateChecker.CheckAsync();
+            if (update is { } u)
+            {
+                var ask = MessageBox.Show(this, Loc.F("UpdateAvailable", u.Version, AppInfo.Version), "CandeDisk",
+                    MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (ask == MessageBoxResult.Yes) AppInfo.OpenUrl(u.Url);
+            }
+            else if (manual)
+            {
+                MessageBox.Show(this, Loc.F("UpdateNone", AppInfo.Version), "CandeDisk", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Write("Update check failed: " + ex.Message);
+            if (manual) MessageBox.Show(this, Loc.T("UpdateError"), "CandeDisk", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
 
     private void Website_Click(object sender, RoutedEventArgs e) => AppInfo.OpenUrl(AppInfo.RepositoryUrl);
 

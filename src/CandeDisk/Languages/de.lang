@@ -21,6 +21,12 @@ MenuHelp = _Hilfe
 MenuGuide = _Anleitung
 MenuOpenLogs = _Protokollordner öffnen
 MenuWebsite = Projekt auf _GitHub
+MenuUpdates = _Nach Updates suchen
+UpdateAvailable = CandeDisk {0} ist verfügbar (Sie haben {1}).
+
+Die Download-Seite öffnen?
+UpdateNone = Sie haben die neueste Version von CandeDisk ({0}).
+UpdateError = Die Suche nach Updates ist fehlgeschlagen. Prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.
 MenuAbout = _Über CandeDisk
 GestureFormat = Strg+Umschalt+F
 GestureDelete = Entf

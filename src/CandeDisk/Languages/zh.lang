@@ -21,6 +21,12 @@ MenuHelp = 帮助(_H)
 MenuGuide = 使用指南(_G)
 MenuOpenLogs = 打开日志文件夹(_L)
 MenuWebsite = GitHub 项目主页(_W)
+MenuUpdates = 检查更新
+UpdateAvailable = CandeDisk {0} 已发布(当前版本 {1})。
+
+是否打开下载页面?
+UpdateNone = 您使用的已是最新版本的 CandeDisk({0})。
+UpdateError = 无法检查更新。请检查网络连接后重试。
 MenuAbout = 关于 CandeDisk(_A)
 GestureFormat = Ctrl+Shift+F
 GestureDelete = Del

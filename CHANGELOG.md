@@ -5,6 +5,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ## [1.2.0] - 2026-10-31
 
 ### Added
+- **Help → Check for updates**, and an automatic check at every start: if a newer release exists the app offers to open its download page (nothing is downloaded or installed by the app).
 - Anonymous usage count: once a day the app sends its name, version, "windows" and interface language to candelab.net/stats. No disk or computer data, no identifier. It can be turned off from **File → Send anonymous usage count**. See "Privacy" in the README.
 
 ## [1.1.0] - 2026-10-25

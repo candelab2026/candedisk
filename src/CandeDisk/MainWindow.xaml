@@ -70,6 +70,9 @@
                 <MenuItem Header="{l:T MenuWebsite}" Click="Website_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconWeb}" /></MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="{l:T MenuUpdates}" Click="Updates_Click">
+                    <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconRefresh}" /></MenuItem.Icon>
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="{l:T MenuAbout}" Click="About_Click">
                     <MenuItem.Icon><Path Style="{StaticResource Icon}" Data="{StaticResource IconInfo}" /></MenuItem.Icon>
